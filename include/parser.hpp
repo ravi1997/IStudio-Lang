@@ -17,7 +17,9 @@ public:
     ~Parser(){
         file.close();
     }
-    
+    void setGrammar(){
+        
+    }
     
 };
 

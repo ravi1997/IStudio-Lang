@@ -17,5 +17,7 @@ class Grammar;
 class Parser;
 
 typedef vector<Terminal> First;
+template<typename t>
+concept isSomething=is_same<t,NonTerminal>::value || is_same<t,Terminal>::value;
 
 #endif

@@ -5,6 +5,8 @@
 #include<types.hpp>
 #endif
 
+
+
 class Rules{
     NonTerminal* left;
     vector<Rule> rs;
@@ -16,6 +18,12 @@ public:
     auto end(){
         return rs.end();
     }
+
+    template<typename... T>
+    Rule& add(isSomething x,T... M);
+
+    Rule add(isSomething);
+    Rule add();
 };
 
 #endif
