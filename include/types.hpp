@@ -10,14 +10,21 @@
 using namespace std;
 
 class Terminal;
+template<typename t>
 class NonTerminal;
+template<typename t>
 class Rule;
+template<typename t>
 class Rules;
+template<typename t>
 class Grammar;
+template<typename t>
 class Parser;
 
-typedef vector<Terminal> First;
-template<typename t>
-concept isSomething=is_same<t,NonTerminal>::value || is_same<t,Terminal>::value;
+
+using First = vector<Terminal>;
+
+template<typename t,typename x>
+concept isSomething=is_same<t,NonTerminal<x>>::value || is_same<t,Terminal>::value;
 
 #endif

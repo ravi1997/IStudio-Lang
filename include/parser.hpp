@@ -6,6 +6,7 @@
 #include<nonterminal.hpp>
 class FileNotFound{};
 
+template<typename t=void>
 class Parser{
     ifstream file;
     vector<string> options;

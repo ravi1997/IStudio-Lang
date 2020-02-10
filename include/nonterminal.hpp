@@ -5,9 +5,9 @@
 #include<types.hpp>
 #endif
 
-
+template<typename t>
 class NonTerminal{
-    shared_ptr<Rules> r;
+    shared_ptr<Rules<t>> r;
 public:
     NonTerminal();
     ~NonTerminal();
@@ -15,7 +15,7 @@ public:
     NonTerminal& operator=(const NonTerminal&&);
     NonTerminal(const NonTerminal&);
     NonTerminal(const NonTerminal&&);
-    shared_ptr<Rules>& operator->();
+    shared_ptr<Rules<t>>& operator->();
     First getFirst();
 };
 

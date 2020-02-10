@@ -6,12 +6,12 @@
 #endif
 
 
-
+template<typename t>
 class Rules{
-    NonTerminal* left;
-    vector<Rule> rs;
+    NonTerminal<t>* left;
+    vector<Rule<t>> rs;
 public:
-    Rules(NonTerminal* x);
+    Rules(NonTerminal<t>* x);
     auto begin(){
         return rs.begin();
     }
@@ -20,10 +20,11 @@ public:
     }
 
     template<typename... T>
-    Rule& add(isSomething x,T... M);
+    Rules<t>& add(isSomething<t> x,T... M);
 
-    Rule add(isSomething);
-    Rule add();
+    Rules<t>& add(isSomething<t>);
+    Rules<t>& add();
+    First getFirst();
 };
 
 #endif

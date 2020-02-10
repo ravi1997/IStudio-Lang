@@ -1,3 +1,7 @@
+#ifndef _TERMINAL_HPP_
+#include<terminal.hpp>
+#endif
+
 #ifndef _RULES_HPP_
 #include<Rules.hpp>
 #endif
@@ -6,24 +10,27 @@
 #include<rule.hpp>
 #endif
 
-Rules::Rules(NonTerminal* x):left{x}{}
-First Rules::getFirst(){}
+template<typename t>
+Rules<t>::Rules(NonTerminal<t>* x):left{x}{}
+template<typename t>
+First Rules<t>::getFirst(){}
+template<typename t>
 template<typename... T>
-Rule& Rules::add(isSomething x,T... M){
-    r.push_back(x);
-    if(sizeof...(M)>0)
-        return add(M...);
-    else
-        return *this;
-}
-
-Rule& Rules::add(isSomething x){
-    r.push_back(x);
-    return *this;
-}
-Rule& Rules::add(){
-    Terminal epsilon{""};    
-    r.push_back(epsilon);
+Rules<t>& Rules<t>::add(isSomething<t> x,T... M){
+    rs.push_back(Rule<t>{});
+    rs[rs.size()-1].add(x,M...);
     return *this;
 }
 
+template<typename t>
+Rules<t>& Rules<t>::add(isSomething<t> x){
+    rs.push_back(Rule<t>{});
+    rs[rs.size()-1].add(x);
+    return *this;
+}
+template<typename t>
+Rules<t>& Rules<t>::add(){
+    rs.push_back(Rule<t>{});
+    rs[rs.size()-1].add();
+    return *this;
+}

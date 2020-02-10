@@ -5,14 +5,15 @@
 #include<types.hpp>
 #endif
 
+template<typename T>
 class Rule{
     union Data{
-            NonTerminal n;
+            NonTerminal<T> n;
             Terminal t;
             Data(){}
-            Data(NonTerminal);
+            Data(NonTerminal<T>);
             Data(Terminal);
-            Data& operator=(NonTerminal);
+            Data& operator=(NonTerminal<T>);
             Data& operator=(Terminal);
             ~Data(){}
     };
@@ -21,19 +22,24 @@ class Rule{
         NONTERMINAL
     };
     vector<pair<Data,Type>> r;
+    typedef T (*ActionType)(Parser<T>);
+    ActionType action;
 public:
     First getFirst();
-    template<typename... T>
-    Rule& add(isSomething x,T... M);
-    
-    Rule& add(isSomething);
+    template<typename... v>
+    Rule& add(isSomething<T> x,v... M);
+
+    Rule& add(isSomething<T>);
     Rule& add();
 };
 
-template<typename... T>
-Rule add(isSomething x,T... M);
+template<typename t, typename... T>
+Rule<t> add(isSomething<t> x,T... M);
 
-Rule add(isSomething);
-Rule add();
+template<typename t>
+Rule<t> add(isSomething<t>);
+
+template<typename t>
+Rule<t> add();
 
 #endif

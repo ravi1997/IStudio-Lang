@@ -7,6 +7,7 @@
 #include<rule.hpp>
 #endif
 
-First Rule::getFirst(){
+template<typename t>
+First Rule<t>::getFirst(){
     return First{};
 }

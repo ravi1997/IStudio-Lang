@@ -5,7 +5,6 @@
 #include<types.hpp>
 #endif
 
-
 class Terminal{
 regex r;
 string pattern;

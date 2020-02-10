@@ -16,23 +16,30 @@
 #endif
 
 
-
-NonTerminal::NonTerminal():r{new Rules{this}}{}
-NonTerminal::~NonTerminal(){}
-NonTerminal& NonTerminal::operator=(const NonTerminal& x){
+template<typename t>
+NonTerminal<t>::NonTerminal():r{new Rules{this}}{}
+template<typename t>
+NonTerminal<t>::~NonTerminal(){}
+template<typename t>
+NonTerminal<t>& NonTerminal<t>::operator=(const NonTerminal<t>& x){
     r=x.r;
     return *this;
 }
-NonTerminal& NonTerminal::operator=(const NonTerminal&&x){
+template<typename t>
+NonTerminal<t>& NonTerminal<t>::operator=(const NonTerminal<t>&&x){
     r=x.r;
     return *this;
 }
-NonTerminal::NonTerminal(const NonTerminal&x):r{x.r}{}
-NonTerminal::NonTerminal(const NonTerminal&&x):r{x.r}{}
-shared_ptr<Rules>& NonTerminal::operator->(){
+template<typename t>
+NonTerminal<t>::NonTerminal(const NonTerminal<t>&x):r{x.r}{}
+template<typename t>
+NonTerminal<t>::NonTerminal(const NonTerminal<t>&&x):r{x.r}{}
+template<typename t>
+shared_ptr<Rules<t>>& NonTerminal<t>::operator->(){
     return r;
 }
-First NonTerminal::getFirst(){
+template<typename t>
+First NonTerminal<t>::getFirst(){
     First f;
     for(auto x:*r)
         f.insert(f.end(),x.getFirst().begin(),x.getFirst().end());
