@@ -22,8 +22,15 @@ class Rule{
         NONTERMINAL
     };
     vector<pair<Data,Type>> r;
-    typedef T (*ActionType)(Parser<T>);
+    typedef T (*ActionType)(Parser<Options,T>);
     ActionType action;
+    Type getType([[maybe_unused]]NonTerminal<T>)const{
+        return Type::NONTERMINAL;
+    }
+    Type getType([[maybe_unused]]Terminal)const{
+        return Type::TERMINAL;
+    }
+    
 public:
     First getFirst();
     template<typename... v>
@@ -31,6 +38,12 @@ public:
 
     Rule& add(isSomething<T>);
     Rule& add();
+    
+    Rule& operator()(ActionType a){
+        action=a;
+        return *this;
+    }
+    T operator()(Parser<Options,T> x);
 };
 
 template<typename t, typename... T>

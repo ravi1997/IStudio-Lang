@@ -18,7 +18,7 @@ public:
     auto end(){
         return rs.end();
     }
-
+    
     template<typename... T>
     Rules<t>& add(isSomething<t> x,T... M);
 

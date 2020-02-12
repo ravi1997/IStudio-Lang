@@ -34,3 +34,8 @@ Rules<t>& Rules<t>::add(){
     rs[rs.size()-1].add();
     return *this;
 }
+
+template<typename T>
+T Rule<T>::operator()(Parser<Options,T> x){
+    return action(x);
+}

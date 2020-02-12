@@ -6,12 +6,13 @@
 #include<nonterminal.hpp>
 class FileNotFound{};
 
-template<typename t=void>
+template<typename Option,typename t=void>
 class Parser{
     ifstream file;
     vector<string> options;
+    Option option;
 public:
-    Parser(string f,vector<string> o):file{f},options{o}{
+    Parser(string f,vector<string> o):file{f},options{o},option{options}{
         if(!file.good())
             throw FileNotFound{};
     }
@@ -20,6 +21,9 @@ public:
     }
     void setGrammar(){
         
+    }
+    Option& getOption(){
+        return option;
     }
     
 };

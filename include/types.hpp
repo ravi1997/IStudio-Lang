@@ -9,6 +9,7 @@
 #include<regex>
 using namespace std;
 
+class Options;
 class Terminal;
 template<typename t>
 class NonTerminal;
@@ -18,7 +19,7 @@ template<typename t>
 class Rules;
 template<typename t>
 class Grammar;
-template<typename t>
+template<typename o,typename t>
 class Parser;
 
 
