@@ -32,6 +32,12 @@ class Rule{
     }
     
 public:
+    Rule(){};
+    ~Rule(){};
+    Rule(const Rule&){};
+    Rule(const Rule&&){};
+    Rule& operator=(const Rule&){};
+    Rule& operator=(const Rule&&){};
     First getFirst();
     template<typename... v>
     Rule& add(isSomething<T> x,v... M);

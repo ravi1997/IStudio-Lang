@@ -17,6 +17,9 @@ public:
     NonTerminal(const NonTerminal&&);
     shared_ptr<Rules<t>>& operator->();
     First getFirst();
+    shared_ptr<Rules<t>>& getRules(){
+        return r;
+    }
 };
 
 #endif

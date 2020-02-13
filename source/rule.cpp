@@ -2,6 +2,10 @@
 #include <terminal.hpp>
 #endif
 
+#ifndef _NON_TERMINAL_HPP_
+#include <nonterminal.hpp>
+#endif
+
 
 #ifndef _RULE_HPP_
 #include<rule.hpp>

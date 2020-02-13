@@ -1,5 +1,11 @@
 #include<iostream>
 #include<parser.hpp>
+#include<grammar.hpp>
+
+
+#include<nonterminal.cpp>
+#include<rule.cpp>
+#include<rules.cpp>
 using namespace std;
 
 class InvalidOption{
@@ -12,7 +18,8 @@ public:
     }
 };
 
-
+class HelpOption{};
+class FewOptions{};
 
 class Options{
 private:
@@ -32,13 +39,19 @@ public:
             else if ((*x=="-o")|| (*x=="-output")){
                 output=true;
                 x++;
+                if(x==s.end())
+                    throw FewOptions{};
                 outputFile=*x;
             }
             else if ((*x=="-I")|| (*x=="-Include")){
                 includePath=true;
                 x++;
+                if(x==s.end())
+                    throw FewOptions{};
                 includePaths=*x;
             }
+            else if((*x=="-h")||(*x=="-help"))
+                throw HelpOption{};
             else
                 throw InvalidOption{*x};
     }
@@ -57,7 +70,7 @@ public:
     string getIncludePath()const{
         return includePaths;
     }
-    
+
 };
 
 
@@ -72,12 +85,22 @@ int main(int argc,char**argv){
         cerr<<"Unknown command running"<<endl;
         return -1;
     }
-    
+
     vector<string> options;
     for(auto i=1;i<argc-1;i++)
         options.push_back(argv[i]);
     try{
-        Parser<Options> p{argv[argc-1],options};
+        Terminal function{"(function)"};
+        Terminal id{"([A-Za-z_][A-Za-z0-9_]*)"};
+        Terminal squareOpenBracket{"(\[)"};
+        Terminal squareCloseBracket{"(])"};
+
+        NonTerminal<int> functionDeclaration;
+
+        functionDeclaration->add(function,squareOpenBracket,squareCloseBracket,id);
+
+        Grammar<int> g{{function,squareOpenBracket,squareCloseBracket,id},{functionDeclaration}};
+        Parser<Options,int> p{argv[argc-1],options};
     }catch(FileNotFound){
         cerr<<"IStudioLang : File not Found"<<endl;
         return -1;
@@ -88,6 +111,21 @@ int main(int argc,char**argv){
         cerr<<"Command: IStudioLang -help"<<endl;
         return -1;
     }
-
+    catch(HelpOption){
+        cout<<"IStudioLang (1.0.1)"<<endl;
+        cout<<"It is a compiler that works for IStudio language"<<endl<<endl;
+        cout <<"Command : IStudioLang [options] filename" << endl<<endl;
+        cout <<"Options" << endl;
+        cout<<"\t[-g][-gdb]\t\tDebug options"<<endl;
+        cout<<"\t[-h][-help]\t\tShow this help"<<endl;
+        cout<<"\t[-I][-include]\t\tInclude options"<<endl;
+        cout<<"\t[-o][-output]\t\tOutput file options"<<endl<<endl;
+        return 0;
+    }
+    catch(FewOptions){
+        cerr<<"IStudioLang : Very few options"<<endl;
+        cerr<<"Command : IStudioLang [options] filename"<<endl;
+        return -1;
+    }
     return 0;
 }

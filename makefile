@@ -1,17 +1,17 @@
-OBJECTS=Object/terminal.o	\
-				Object/nonterminal.o	\
-				Object/Rules.o	\
-				Object/rule.o
+OBJECTS=Object/terminal.o
 
 
 Object/%.o:source/%.cpp
 	g++ -Iinclude -fconcepts -std=c++2a -Wall -Wextra -c $< -o $@
 
 bin/IStudioLang:$(OBJECTS)
-	g++ -Iinclude -std=c++2a -fconcepts -Wall -Wextra source/main.cpp $< -o $@
+	g++ -Iinclude -Isource -std=c++2a -fconcepts -Wall -Wextra source/main.cpp $< -o $@
 
 all : clean bin/IStudioLang
-	./bin/IStudioLang test/t1.is
+	./bin/IStudioLang -g test/t1.is && true
+	./bin/IStudioLang -o test/t1.o test/t1.is && true
+	./bin/IStudioLang -g -h test/t1.is && true
+	./bin/IStudioLang -I test/t1.is && true
 
 clean:
 	rm -rf bin/* Object/*
