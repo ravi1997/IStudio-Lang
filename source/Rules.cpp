@@ -13,7 +13,12 @@
 template<typename t>
 Rules<t>::Rules(NonTerminal<t>* x):left{x}{}
 template<typename t>
-First Rules<t>::getFirst(){}
+First Rules<t>::getFirst(){
+    First f;
+    for(auto h:rs)
+        f.insert(f.end(),h.getFirst().begin(),h.getFirst().end());
+    return f;
+}
 template<typename t>
 template<typename... T>
 Rules<t>& Rules<t>::add(isSomething<t> x,T... M){
@@ -35,7 +40,3 @@ Rules<t>& Rules<t>::add(){
     return *this;
 }
 
-template<typename T>
-T Rule<T>::operator()(Parser<Options,T> x){
-    return action(x);
-}

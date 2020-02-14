@@ -13,6 +13,8 @@ class Rule{
             Data(){}
             Data(NonTerminal<T>);
             Data(Terminal);
+            Data(const Data&){}
+            Data(const Data&&){}
             Data& operator=(NonTerminal<T>);
             Data& operator=(Terminal);
             ~Data(){}
@@ -22,7 +24,7 @@ class Rule{
         NONTERMINAL
     };
     vector<pair<Data,Type>> r;
-    typedef T (*ActionType)(Parser<Options,T>);
+    typedef T (*ActionType)(Parser<T>);
     ActionType action;
     Type getType([[maybe_unused]]NonTerminal<T>)const{
         return Type::NONTERMINAL;
@@ -30,7 +32,7 @@ class Rule{
     Type getType([[maybe_unused]]Terminal)const{
         return Type::TERMINAL;
     }
-    
+
 public:
     Rule(){};
     ~Rule(){};
@@ -44,12 +46,12 @@ public:
 
     Rule& add(isSomething<T>);
     Rule& add();
-    
+
     Rule& operator()(ActionType a){
         action=a;
         return *this;
     }
-    T operator()(Parser<Options,T> x);
+    T operator()(Parser<T> x);
 };
 
 template<typename t, typename... T>

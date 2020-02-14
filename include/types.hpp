@@ -19,7 +19,7 @@ template<typename t>
 class Rules;
 template<typename t>
 class Grammar;
-template<typename o,typename t>
+template<typename t>
 class Parser;
 
 

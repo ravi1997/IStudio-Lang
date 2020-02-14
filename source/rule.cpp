@@ -13,9 +13,26 @@
 
 template<typename t>
 First Rule<t>::getFirst(){
-    return First{};
+    for(auto i:r)
+        if(i.second==Type::TERMINAL)
+            return First{i.first};
+        else{
+            bool flag=false;
+            for(auto x:i.first.getFirst())
+                if(x==epsilon){
+                    flag=true;
+                    break;
+                }
+            if(flag==true)
+                continue;
+            return i.first.getFirst();
+        }
 }
 
+template<typename T>
+T Rule<T>::operator()(Parser<T> x){
+    return action(x);
+}
 
 
     template<typename T>

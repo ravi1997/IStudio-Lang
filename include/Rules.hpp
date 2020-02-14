@@ -40,7 +40,9 @@ public:
         rs.push_back(r);
         return *this;
     }
-    
+    Rule<t>& operator[](int x){
+        return rs[x];
+    }
 };
 
 #endif

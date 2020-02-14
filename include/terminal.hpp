@@ -25,4 +25,6 @@ public:
     
 };
 
+extern Terminal epsilon;
+
 #endif
