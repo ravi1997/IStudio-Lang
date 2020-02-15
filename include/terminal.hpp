@@ -11,7 +11,7 @@ string pattern;
 public:
     Terminal(string s):r{(s!=string{""})?string{"^"}+s:s},pattern{s}{}
     string getMatch(string s){
-        smatch m; 
+        smatch m;
         regex_search(s, m, r);
         for(auto x:m)
             return x;
@@ -22,9 +22,10 @@ public:
     bool operator!=(const Terminal t)const{
         return !(*this==t);
     }
-    
+
 };
 
 extern Terminal epsilon;
+extern Terminal dollar;
 
 #endif

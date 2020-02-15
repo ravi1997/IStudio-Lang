@@ -22,20 +22,20 @@ First Rules<t>::getFirst(){
 template<typename t>
 template<typename... T>
 Rules<t>& Rules<t>::add(isSomething<t> x,T... M){
-    rs.push_back(Rule<t>{});
+    rs.push_back(Rule<t>{this});
     rs[rs.size()-1].add(x,M...);
     return *this;
 }
 
 template<typename t>
 Rules<t>& Rules<t>::add(isSomething<t> x){
-    rs.push_back(Rule<t>{});
+    rs.push_back(Rule<t>{this});
     rs[rs.size()-1].add(x);
     return *this;
 }
 template<typename t>
 Rules<t>& Rules<t>::add(){
-    rs.push_back(Rule<t>{});
+    rs.push_back(Rule<t>{this});
     rs[rs.size()-1].add();
     return *this;
 }

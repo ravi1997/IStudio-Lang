@@ -20,6 +20,7 @@ public:
     shared_ptr<Rules<t>>& getRules(){
         return r;
     }
+    Follow getFollow(Grammar<t>);
 };
 
 #endif

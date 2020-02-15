@@ -15,6 +15,10 @@
 #include<Rules.hpp>
 #endif
 
+#ifndef _GRAMMAR_HPP_
+#include<grammar.hpp>
+#endif
+
 
 template<typename t>
 NonTerminal<t>::NonTerminal():r{new Rules{this}}{}
@@ -46,3 +50,9 @@ First NonTerminal<t>::getFirst(){
 
     return f;
 }
+
+template<typename t>
+Follow NonTerminal<t>::getFollow(Grammar<t> g){
+    return g.getFollow(*this);
+}
+

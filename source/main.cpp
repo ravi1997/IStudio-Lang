@@ -34,7 +34,7 @@ int main(int argc,char**argv){
 
         functionDeclaration->add(function,squareOpenBracket,squareCloseBracket,id);
 
-        Grammar<int> g{{function,squareOpenBracket,squareCloseBracket,id},{functionDeclaration}};
+        Grammar<int> g{{function,squareOpenBracket,squareCloseBracket,id},{functionDeclaration},functionDeclaration};
         Parser<int> p{argv[argc-1],options};
 
     }catch(FileNotFound){

@@ -21,14 +21,14 @@ public:
     auto end(){
         return rs.end();
     }
-    
+
     template<typename... T>
     Rules<t>& add(isSomething<t> x,T... M);
 
     Rules<t>& add(isSomething<t>);
     Rules<t>& add();
     First getFirst();
-    
+
     Rules& operator|(const Rules r){
         if((r.left!=nullptr) &&(left!=nullptr) && (left!=r.left))
             throw InvalidRuleMisMatch{};
@@ -43,6 +43,7 @@ public:
     Rule<t>& operator[](int x){
         return rs[x];
     }
+    friend class Rule<t>;
 };
 
 #endif

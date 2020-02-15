@@ -24,6 +24,7 @@ class Parser;
 
 
 using First = vector<Terminal>;
+using Follow = vector<Terminal>;
 
 template<typename t,typename x>
 concept isSomething=is_same<t,NonTerminal<x>>::value || is_same<t,Terminal>::value;

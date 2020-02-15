@@ -1,4 +1,4 @@
-#ifndef _GRAMMMAR_HPP_
+#ifndef _GRAMMAR_HPP_
 #define _GRAMMAR_HPP_
 
 #include<types.hpp>
@@ -10,10 +10,11 @@
 template<typename T>
 class Grammar{
     vector<Terminal> t;
-    vector<NonTerminal<int>> n;
+    vector<NonTerminal<T>> n;
     Rules<T> r;
+    NonTerminal<T> start;
     int numberOfRules=0;
-    Grammar(vector<Terminal> x,vector<NonTerminal<int>> y):t{x},n{y}{
+    Grammar(vector<Terminal> x,vector<NonTerminal<T>> y,NonTerminal<T> s):t{x},n{y},start{s}{
         int v=0;
         for(auto i:n){
             for(auto j:*i.getRules()){
@@ -41,6 +42,16 @@ class Grammar{
     }
     int& getNumberOfRules(){
         return numberOfRules;
+    }
+    Follow getFollowOf(NonTerminal<T> n){
+            Follow fn;
+            for(auto x:r){
+                Follow temp=x.getFollow(*this,n);
+                fn.insert(fn.end(),temp.begin(),temp.end());
+            }
+            if(n==start)
+                fn.push_back(dollar);
+            return fn;
     }
 };
 

@@ -32,10 +32,11 @@ class Rule{
     Type getType([[maybe_unused]]Terminal)const{
         return Type::TERMINAL;
     }
-
+    Rules<T>* rs;
 public:
     Rule(){};
     ~Rule(){};
+    Rule(Rules<T>* sr):rs{sr}{}
     Rule(const Rule&){};
     Rule(const Rule&&){};
     Rule& operator=(const Rule&){};
@@ -52,6 +53,12 @@ public:
         return *this;
     }
     T operator()(Parser<T> x);
+    Follow getFollowOf(Grammar<T>,NonTerminal<T> n);
+    Rules<T>& operator|(Rule r){
+        return (*rs)|r;
+    }
+
+    friend class Rules<T>;
 };
 
 template<typename t, typename... T>
