@@ -31,24 +31,11 @@ First Rule<t>::getFirst(){
 
 template<typename T>
 T Rule<T>::operator()(Parser<T> x){
+    if(action==nullptr)
+        throw ActionNotSet{};
     return action(x);
 }
 
-
-    template<typename T>
-    Rule<T>::Data::Data(NonTerminal<T> x):n{x}{}
-    template<typename T>
-    Rule<T>::Data::Data(Terminal x):t{x}{}
-    template<typename T>
-    Rule<T>::Data& Rule<T>::Data::operator=(NonTerminal<T> x){
-        n=x;
-        return *this;
-    }
-    template<typename T>
-    Rule<T>::Data& Rule<T>::Data::operator=(Terminal x){
-        t=x;
-        return *this;
-    }
 
     template<typename T>
     template<typename... v>
@@ -64,7 +51,6 @@ T Rule<T>::operator()(Parser<T> x){
     }
     template<typename T>
     Rule<T>& Rule<T>::add(){
-        Terminal epsilon;
         r.push_back(pair{epsilon,getType(epsilon)});
         return *this;
     }
@@ -80,7 +66,7 @@ Follow Rule<T>::getFollowOf(Grammar<T> g,NonTerminal<T> n){
                 f.push_back(i.first.t);
             else{
                 First f2;
-                if (i.first.n==*(rs->left))
+                if (get<NonTerminal>(i.first)==*(rs->left))
                 {
 
                 }

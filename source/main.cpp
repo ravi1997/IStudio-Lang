@@ -28,14 +28,20 @@ int main(int argc,char**argv){
         Terminal function{"(function)"};
         Terminal id{"([A-Za-z][A-Za-z0-9]*)"};
         Terminal squareOpenBracket{"(\\[)"};
+        Terminal parenthesisOpen{"(\\()"};
+        Terminal parenthesisClose{"(\\))"};
         Terminal squareCloseBracket{"(])"};
 
         NonTerminal<int> functionDeclaration;
 
-        functionDeclaration->add(function,squareOpenBracket,squareCloseBracket,id);
+        functionDeclaration->add(function,squareOpenBracket,squareCloseBracket,id,parenthesisOpen,parenthesisClose)([]([[maybe_unused]]Parser<int> p)->int{
+
+            return 0x01;
+        });
 
         Grammar<int> g{{function,squareOpenBracket,squareCloseBracket,id},{functionDeclaration},functionDeclaration};
         Parser<int> p{argv[argc-1],options};
+        p.setGrammar(g);
 
     }catch(FileNotFound){
         cerr<<"IStudioLang : File not Found"<<endl;
@@ -55,7 +61,8 @@ int main(int argc,char**argv){
         cout<<"\t[-g][-gdb]\t\tDebug options"<<endl;
         cout<<"\t[-h][-help]\t\tShow this help"<<endl;
         cout<<"\t[-I][-include]\t\tInclude options"<<endl;
-        cout<<"\t[-o][-output]\t\tOutput file options"<<endl<<endl;
+        cout<<"\t[-o][-output]\t\tOutput file options"<<endl;
+        cout<<"\t[-l][-logger]\t\tLogger file options"<<endl<<endl;
         return 0;
     }
     catch(FewOptions){

@@ -6,7 +6,12 @@
 #include<fstream>
 #include<vector>
 #include<string>
+#include <chrono>  // chrono::system_clock
+#include <ctime>   // localtime
+#include <sstream>
+#include <iomanip> // put_time
 #include<regex>
+#include<variant>
 using namespace std;
 
 class Options;
@@ -25,6 +30,7 @@ class Parser;
 
 using First = vector<Terminal>;
 using Follow = vector<Terminal>;
+using Token = pair<Terminal,string>;
 
 template<typename t,typename x>
 concept isSomething=is_same<t,NonTerminal<x>>::value || is_same<t,Terminal>::value;

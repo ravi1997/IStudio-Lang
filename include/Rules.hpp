@@ -13,8 +13,18 @@ class Rules{
 public:
     Rules(NonTerminal<t>* x);
     Rules(){}
-    Rules(const Rules& r):left{r.left},rs{r.left}{}
-    Rules(const Rules&& r):left{r.left},rs{r.left}{}
+    Rules(const Rules& r):left{r.left},rs{r.rs}{}
+    Rules(const Rules&& r):left{r.left},rs{r.rs}{}
+    Rules& operator=(const Rules& h){
+        left=h.left;
+        rs=h.rs;
+        return *this;
+    }
+    Rules& operator=(const Rules&& h){
+        left=h.left;
+        rs=h.rs;
+        return *this;
+    }
     auto begin(){
         return rs.begin();
     }
@@ -23,10 +33,10 @@ public:
     }
 
     template<typename... T>
-    Rules<t>& add(isSomething<t> x,T... M);
+    Rule<t>& add(isSomething<t> x,T... M);
 
-    Rules<t>& add(isSomething<t>);
-    Rules<t>& add();
+    Rule<t>& add(isSomething<t>);
+    Rule<t>& add();
     First getFirst();
 
     Rules& operator|(const Rules r){

@@ -15,10 +15,15 @@ class Parser{
     vector<string> options;
     Options option;
     Grammar<t> g;
+    string code;
 public:
     Parser(string f,vector<string> o):file{f},options{o},option{options}{
         if(!file.good())
             throw FileNotFound{};
+        char c;
+        while(file>>noskipws>>c)
+            code+=c;
+        //cout<<code<<endl;
     }
     ~Parser(){
         file.close();
@@ -27,12 +32,18 @@ public:
         g=e;
     }
     void init(){
-        
+
+    }
+    Token getNextToken(){
+        return g.getNextToken();
+    }
+    void startParsing(){
+
     }
     Options& getOption(){
         return option;
     }
-    
+
 };
 
 #endif

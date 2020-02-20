@@ -22,7 +22,11 @@ public:
     bool operator!=(const Terminal t)const{
         return !(*this==t);
     }
-
+    string match(string s){
+        smatch m;
+        regex_search(s, m, r);
+        return m.str(1);
+    }
 };
 
 extern Terminal epsilon;

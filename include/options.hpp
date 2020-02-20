@@ -1,6 +1,7 @@
 #ifndef _OPTIONS_HPP_
 #define _OPTIONS_HPP_
 
+#include<logger.hpp>
 
 class InvalidOption{
     string s;
@@ -23,6 +24,8 @@ private:
     string outputFile="";
     bool includePath=false;
     string includePaths="";
+    bool logger=false;
+    Logger loggerFile;
 public:
     Options(vector<string> s){
         for(auto x=s.begin(),z=s.end();x!=z;x++)
@@ -46,6 +49,16 @@ public:
             }
             else if((*x=="-h")||(*x=="-help"))
                 throw HelpOption{};
+            else if((*x=="-lf")||(*x=="-loggerFile")){
+                logger=true;
+                x++;
+                if(x==s.end())
+                    throw FewOptions{};
+                loggerFile=Logger{*x};
+            }
+            else if((*x=="-l")||(*x=="-logger")){
+                logger=true;
+            }
             else
                 throw InvalidOption{*x};
     }
@@ -58,13 +71,18 @@ public:
     bool getIncludePathFlag()const{
         return debug;
     }
+    bool getLogger() const{
+        return logger;
+    }
     string getOutputFile()const{
         return outputFile;
     }
     string getIncludePath()const{
         return includePaths;
     }
-
+    Logger getLoggerFile(){
+        return loggerFile;
+    }
 };
 
 

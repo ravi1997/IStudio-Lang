@@ -5,42 +5,46 @@
 #include<types.hpp>
 #endif
 
+class ActionNotSet{};
+
 template<typename T>
 class Rule{
-    union Data{
-            NonTerminal<T> n;
-            Terminal t;
-            Data(){}
-            Data(NonTerminal<T>);
-            Data(Terminal);
-            Data(const Data&){}
-            Data(const Data&&){}
-            Data& operator=(NonTerminal<T>);
-            Data& operator=(Terminal);
-            ~Data(){}
-    };
     enum class Type{
         TERMINAL,
         NONTERMINAL
     };
-    vector<pair<Data,Type>> r;
+    vector<pair<variant<NonTerminal<T>,Terminal>,Type>> r;
     typedef T (*ActionType)(Parser<T>);
-    ActionType action;
+    ActionType action=nullptr;
     Type getType([[maybe_unused]]NonTerminal<T>)const{
         return Type::NONTERMINAL;
     }
     Type getType([[maybe_unused]]Terminal)const{
         return Type::TERMINAL;
     }
-    Rules<T>* rs;
+    Rules<T>* rs=nullptr;
 public:
     Rule(){};
     ~Rule(){};
     Rule(Rules<T>* sr):rs{sr}{}
-    Rule(const Rule&){};
-    Rule(const Rule&&){};
-    Rule& operator=(const Rule&){};
-    Rule& operator=(const Rule&&){};
+    Rule(const Rule& f):r{f.r},action{f.action},rs{f.rs}{}
+    Rule(const Rule&& f):r{f.r},action{f.action},rs{f.rs}{}
+    Rule& operator=(const Rule& f){
+        r.clear();
+        for(auto i:f.r)
+            r.push_back(i);
+        rs=f.rs;
+        action=f.action;
+        return *this;
+    }
+    Rule& operator=(const Rule&&f){
+        r.clear();
+        for(auto i:f.r)
+            r.push_back(i);
+        rs=f.rs;
+        action=f.action;
+        return *this;
+    }
     First getFirst();
     template<typename... v>
     Rule& add(isSomething<T> x,v... M);

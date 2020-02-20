@@ -7,6 +7,9 @@
 #include<Rule.hpp>
 #include<Rules.hpp>
 
+class TokenMismatch{};
+
+
 template<typename T>
 class Grammar{
     vector<Terminal> t;
@@ -25,15 +28,17 @@ class Grammar{
         numberOfRules=v;
     }
     Grammar(){}
+    Grammar(const Grammar&g):t{g.t},n{g.n},r{g.r},start{g.start},numberOfRules{g.numberOfRules}{}
+    Grammar(const Grammar&&g):t{g.t},n{g.n},r{g.r},start{g.start},numberOfRules{g.numberOfRules}{}
     Grammar& operator=(const Grammar& h){
         t=h.t;
-        n=h.t;
+        n=h.n;
         r=h.r;
         return *this;
     }
     Grammar& operator=(const Grammar&& h){
         t=h.t;
-        n=h.t;
+        n=h.n;
         r=h.r;
         return *this;
     }
@@ -52,6 +57,26 @@ class Grammar{
             if(n==start)
                 fn.push_back(dollar);
             return fn;
+    }
+    pair<Terminal,string> getNextToken(string& gh){
+        string s;
+        Terminal sdf;
+        for(string ccv;auto i:t){
+            ccv=i.match(gh);
+            if(s.length()==ccv.length())
+                throw TokenMismatch{};
+            else if(s.length()<ccv.length()){
+                s=ccv;
+                sdf=i;
+            }
+        }
+        size_t pos = gh.find(s);
+        if (pos != string::npos)
+        {
+            // If found then erase it from string
+            gh.erase(pos, s.length());
+        }
+        return {sdf,s};
     }
 };
 

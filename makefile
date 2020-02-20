@@ -9,9 +9,6 @@ bin/IStudioLang:$(OBJECTS)
 
 all : clean bin/IStudioLang
 	./bin/IStudioLang -g test/t1.is && true
-	./bin/IStudioLang -o test/t1.o test/t1.is && true
-	./bin/IStudioLang -g -h test/t1.is && true
-	./bin/IStudioLang -I test/t1.is && true
 
 clean:
 	rm -rf bin/* Object/*
