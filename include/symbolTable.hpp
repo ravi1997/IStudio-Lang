@@ -10,13 +10,8 @@ class SymbolTable{
         UNION,
         INTERFACE
     };
-    struct variable{
-        string name;
-        string file;
-        unsigned int line;
-        boolean known;
-    };
-    map<Type,Map<string,variable>> table;
+    variant<Variable,Function,Class,>
+    void insert()
 };
 
 

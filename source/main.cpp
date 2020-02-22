@@ -1,6 +1,6 @@
 #include<iostream>
 #include<parser.hpp>
-
+#include<DAG.hpp>
 
 #include<nonterminal.cpp>
 #include<rule.cpp>
@@ -32,15 +32,12 @@ int main(int argc,char**argv){
         Terminal parenthesisClose{"(\\))"};
         Terminal squareCloseBracket{"(])"};
 
-        NonTerminal<int> functionDeclaration;
+        NonTerminal<DAG> functionDeclaration;
 
-        functionDeclaration->add(function,squareOpenBracket,squareCloseBracket,id,parenthesisOpen,parenthesisClose)([]([[maybe_unused]]Parser<int> p)->int{
+        functionDeclaration->add(function,squareOpenBracket,squareCloseBracket,id,parenthesisOpen,parenthesisClose);
 
-            return 0x01;
-        });
-
-        Grammar<int> g{{function,squareOpenBracket,squareCloseBracket,id},{functionDeclaration},functionDeclaration};
-        Parser<int> p{argv[argc-1],options};
+        Grammar<DAG> g{{function,squareOpenBracket,squareCloseBracket,id},{functionDeclaration},functionDeclaration};
+        Parser<DAG> p{argv[argc-1],options};
         p.setGrammar(g);
 
     }catch(FileNotFound){
