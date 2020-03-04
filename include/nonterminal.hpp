@@ -5,22 +5,51 @@
 #include<types.hpp>
 #endif
 
-template<typename t>
+template<typename t=void>
 class NonTerminal{
-    shared_ptr<Rules<t>> r;
+    Rules<t>* rs=nullptr;
 public:
-    NonTerminal();
-    ~NonTerminal();
-    NonTerminal& operator=(const NonTerminal&);
-    NonTerminal& operator=(const NonTerminal&&);
-    NonTerminal(const NonTerminal&);
-    NonTerminal(const NonTerminal&&);
-    shared_ptr<Rules<t>>& operator->();
-    First getFirst();
-    shared_ptr<Rules<t>>& getRules(){
-        return r;
+    NonTerminal(){}
+    ~NonTerminal(){
+        if(rs!=nullptr)
+            delete rs;
     }
-    Follow getFollow(Grammar<t>);
+    NonTerminal& operator=(const NonTerminal& n){
+        if(rs!=nullptr)
+            delete rs;
+        rs=new Rules{*(n.rs)};
+        return *this;
+    }
+    NonTerminal& operator=(const NonTerminal&& n){
+        if(rs!=nullptr)
+            delete rs;
+        rs=n.rs;
+        return *this;
+    }
+    NonTerminal(const NonTerminal& n){
+        rs=new Rules{*(n.rs)};
+    }
+    NonTerminal(const NonTerminal&& n){
+        rs=n.rs;
+    }
+    Rules<t>* operator->(){
+        if(rs==nullptr)
+            return rs;
+        rs=new Rules<t>{this};
+        return rs;
+    }
+    First<t> getFirst(){
+        First<t> f;
+        for(auto x:*rs)
+            f.insert(f.end(),x.getFirst().begin(),x.getFirst().end());
+        return f;
+    }
+    Rules<t>& getRules() const{
+        return *rs;
+    }
+    Follow<t> getFollow(Grammar<t> g){
+        return g.getFollow(*this);
+    }
 };
 
 #endif

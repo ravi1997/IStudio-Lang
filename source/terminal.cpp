@@ -2,5 +2,7 @@
 #include<terminal.hpp>
 #endif
 
-Terminal epsilon{""};
-Terminal dollar{"$"};
+template<typename t>
+const Terminal<t> Terminal<t>::epsilon{""};
+template<typename t>
+const Terminal<t> Terminal<t>::dollar{"$",true};

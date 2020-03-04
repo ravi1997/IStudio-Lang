@@ -15,6 +15,7 @@
 using namespace std;
 
 class Options;
+template<typename t>
 class Terminal;
 template<typename t>
 class NonTerminal;
@@ -28,11 +29,14 @@ template<typename t>
 class Parser;
 
 
-using First = vector<Terminal>;
-using Follow = vector<Terminal>;
-using Token = pair<Terminal,string>;
+template<typename t>
+using First = vector<Terminal<t>>;
+template<typename t>
+using Follow = vector<Terminal<t>>;
+template<typename t>
+using Token = pair<Terminal<t>,string>;
 
 template<typename t,typename x>
-concept isSomething=is_same<t,NonTerminal<x>>::value || is_same<t,Terminal>::value;
+concept isSomething=is_same<t,NonTerminal<x>>::value || is_same<t,Terminal<x>>::value;
 
 #endif

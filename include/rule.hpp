@@ -9,19 +9,36 @@ class ActionNotSet{};
 
 template<typename T>
 class Rule{
-    enum class Type{
-        TERMINAL,
-        NONTERMINAL
+    class rightAssociate{
+    private:
+        enum class Type{
+            TERMINAL,
+            NONTERMINAL,
+            FAULTY
+        };
+        Type getType([[maybe_unused]]NonTerminal<T>)const{
+            return Type::NONTERMINAL;
+        }
+        Type getType([[maybe_unused]]Terminal)const{
+            return Type::TERMINAL;
+        }
+        union Data{
+            NonTerminal<T> n;
+            Terminal<T> t;
+            char x;
+        };
+        Type type;
+        Data data;
+    public:
+        rightAssociate(NonTerminal<T> x):type{Type::NONTERMINAL},data.n{x}{}
+        rightAssociate(Terminal<T> x):type{Type::TERMINAL},data.t{x}{}
+        rightAssociate():type{Type::FAULTY},data.x{}{}
     };
-    vector<pair<variant<NonTerminal<T>,Terminal>,Type>> r;
+    
+    vector<rightAssociate> r;
     typedef T (*ActionType)(Parser<T>);
     ActionType action=nullptr;
-    Type getType([[maybe_unused]]NonTerminal<T>)const{
-        return Type::NONTERMINAL;
-    }
-    Type getType([[maybe_unused]]Terminal)const{
-        return Type::TERMINAL;
-    }
+    
     Rules<T>* rs=nullptr;
 public:
     Rule(){};

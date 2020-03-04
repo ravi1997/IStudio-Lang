@@ -2,7 +2,7 @@
 #include<parser.hpp>
 #include<DAG.hpp>
 
-#include<nonterminal.cpp>
+#include<terminal.cpp>
 #include<rule.cpp>
 #include<rules.cpp>
 using namespace std;
