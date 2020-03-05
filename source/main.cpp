@@ -3,7 +3,6 @@
 #include<DAG.hpp>
 
 #include<terminal.cpp>
-#include<rule.cpp>
 #include<rules.cpp>
 using namespace std;
 
