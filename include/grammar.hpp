@@ -12,15 +12,16 @@ class TokenMismatch{};
 
 template<typename T>
 class Grammar{
-    vector<Terminal> t;
+    vector<Terminal<T>> t;
     vector<NonTerminal<T>> n;
     Rules<T> r;
     NonTerminal<T> start;
     int numberOfRules=0;
-    Grammar(vector<Terminal> x,vector<NonTerminal<T>> y,NonTerminal<T> s):t{x},n{y},start{s}{
+  public:
+    Grammar(vector<Terminal<T>> x,vector<NonTerminal<T>> y,NonTerminal<T> s):t{x},n{y},start{s}{
         int v=0;
         for(auto i:n){
-            for(auto j:*i.getRules()){
+            for(auto j:i.getRules()){
                 r|j;
                 v++;
             }
@@ -48,19 +49,20 @@ class Grammar{
     int& getNumberOfRules(){
         return numberOfRules;
     }
-    Follow getFollowOf(NonTerminal<T> n){
-            Follow fn;
+
+    Follow<T> getFollowOf(NonTerminal<T> n){
+            Follow<T> fn;
             for(auto x:r){
-                Follow temp=x.getFollow(*this,n);
+                Follow<T> temp=x.getFollow(*this,n);
                 fn.insert(fn.end(),temp.begin(),temp.end());
             }
             if(n==start)
-                fn.push_back(dollar);
+                fn.push_back(Terminal<T>::dollar);
             return fn;
     }
-    pair<Terminal,string> getNextToken(string& gh){
+    pair<Terminal<T>,string> getNextToken(string& gh){
         string s;
-        Terminal sdf;
+        Terminal<T> sdf;
         for(string ccv;auto i:t){
             ccv=i.match(gh);
             if(s.length()==ccv.length())

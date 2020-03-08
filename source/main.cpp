@@ -3,7 +3,6 @@
 #include<DAG.hpp>
 
 #include<terminal.cpp>
-#include<rules.cpp>
 using namespace std;
 
 
@@ -24,12 +23,12 @@ int main(int argc,char**argv){
         options.push_back(argv[i]);
     try{
 
-        Terminal function{"(function)"};
-        Terminal id{"([A-Za-z][A-Za-z0-9]*)"};
-        Terminal squareOpenBracket{"(\\[)"};
-        Terminal parenthesisOpen{"(\\()"};
-        Terminal parenthesisClose{"(\\))"};
-        Terminal squareCloseBracket{"(])"};
+        Terminal<DAG> function{"(function)"};
+        Terminal<DAG> id{"([A-Za-z][A-Za-z0-9]*)"};
+        Terminal<DAG> squareOpenBracket{"(\\[)"};
+        Terminal<DAG> parenthesisOpen{"(\\()"};
+        Terminal<DAG> parenthesisClose{"(\\))"};
+        Terminal<DAG> squareCloseBracket{"(])"};
 
         NonTerminal<DAG> functionDeclaration;
 

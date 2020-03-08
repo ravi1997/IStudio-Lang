@@ -5,8 +5,6 @@
 #include<types.hpp>
 #endif
 
-class ActionNotSet{};
-
 template<typename T>
 class Rule{
     class rightAssociate{

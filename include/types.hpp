@@ -39,4 +39,7 @@ using Token = pair<Terminal<t>,string>;
 template<typename t,typename x>
 concept isSomething=is_same<t,NonTerminal<x>>::value || is_same<t,Terminal<x>>::value;
 
+class ActionNotSet{};
+
+
 #endif

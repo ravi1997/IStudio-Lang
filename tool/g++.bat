@@ -1,2 +1,2 @@
 @echo off
-wsl -c "/opt/wing++ '%*'"
+wsl /opt/wing++ '%*'

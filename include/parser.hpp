@@ -16,27 +16,27 @@ class Parser{
     Options option;
     Grammar<t> g;
     string code;
-    
+
     enum class Type{
         LL0,
         LR0
     };
     Type parserType;
     union ParserTable{
-        map<NonTerminal<t>,map<Terminal,Rule<t>>> LL0Table;
+        map<NonTerminal<t>,map<Terminal<t>,Rule<t>>> LL0Table;
         struct LR0{
             enum class Type{
                 SHIFT,
                 REDUCE
             };
-            map<int,map<Terminal,pair<Type,int>>> actionTable;
+            map<int,map<Terminal<t>,pair<Type,int>>> actionTable;
             map<int,map<NonTerminal<t>,int>> gotoTable;
         }LR0Table;
         ~ParserTable(){}
         ParserTable(){}
     }parseTable;
-    
-    
+
+
 public:
     Parser(string f,vector<string> o,string s="LL0"):file{f},options{o},option{options}{
         if(!file.good())
@@ -45,9 +45,9 @@ public:
         while(file>>noskipws>>c)
             code+=c;
         if(s=="LL0")
-            parserType=LL0;
+            parserType=Type::LL0;
         else
-            parserType=LR0;
+            parserType=Type::LR0;
         //cout<<code<<endl;
     }
     ~Parser(){
@@ -58,16 +58,15 @@ public:
     }
     void init(){
         if(parserType==Type::LL0){
-            for(auto 
-            parserTable.LL0Table[]
         }
         else{
-        
+
         }
     }
-    Token getNextToken(){
+    Token<t> getNextToken(){
         return g.getNextToken();
     }
+    
     void startParsing(){
 
     }

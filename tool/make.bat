@@ -1,2 +1,2 @@
 @echo off
-wsl -c "/opt/winmake '%*'"
+wsl /opt/winmake '%*'

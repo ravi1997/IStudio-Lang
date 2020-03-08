@@ -22,7 +22,7 @@ public:
         d.root->result=root;
         root->right=d.root;
     }
-        
+
 };
 
 #endif
