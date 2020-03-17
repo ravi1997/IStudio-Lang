@@ -1,18 +1,22 @@
 #ifndef _DAG_HPP_
 #define _DAG_HPP_
 
+#ifndef _TYPES_HPP_
+#include <types.hpp>
+#endif
+
 class DAG{
 private:
     struct Node{
-        Token data;
-        shared_ptr<Node> left, right, current, result;
-        Node(Token&t):data{t}{}
+        Token<DAG> data;
+        Node *left=nullptr, *right=nullptr, *current=nullptr, *result=nullptr;
+        Node(Token<DAG>&t):data{t}{}
     };
-    shared_ptr<Node> root;
+    Node* root=nullptr;
 
 public:
-    void setData(Token&t){
-        root->data=t;
+    void setData(Token<DAG>&t){
+        root=new Node{t};
     }
     void setLeft(DAG& d){
         d.root->result=root;

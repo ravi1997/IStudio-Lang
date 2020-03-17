@@ -15,9 +15,10 @@ class Terminal{
     };
     Type type;
     using actionType=void (*)(Parser<t>&);
-    actionType action;
+    actionType action=nullptr;
 public:
-    Terminal(string s="",bool end=false):pattern{s},type{(end)?Type::END:(s=="")?Type::EPSILON:Type::NORMAL}{}
+    Terminal():pattern{""},type{Type::NORMAL},action{nullptr}{}
+    Terminal(string s,bool end=false):pattern{s},type{(end)?Type::END:(s=="")?Type::EPSILON:Type::NORMAL}{}
     ~Terminal(){}
     Terminal(const Terminal& x):pattern{x.pattern},type{x.type},action{x.action}{}
     Terminal(const Terminal&& x):pattern{x.pattern},type{x.type},action{x.action}{}
@@ -33,7 +34,7 @@ public:
         action=x.action;
         return *this;
     }
-    
+
     string getMatch(string s){
         smatch m;
         regex_search(s, m, regex{(pattern!=string{""})?string{"^"}+pattern:pattern});

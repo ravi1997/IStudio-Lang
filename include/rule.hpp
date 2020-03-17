@@ -5,53 +5,63 @@
 #include<types.hpp>
 #endif
 
-template<typename T>
+
+template<typename cc>
 class Rule{
     class rightAssociate{
     private:
         enum class Type{
+            FAULTY,
             TERMINAL,
-            NONTERMINAL,
-            FAULTY
+            NONTERMINAL
         };
-        Type getType([[maybe_unused]]NonTerminal<T>)const{
+        friend ostream& operator<<(ostream& o,Type t){
+          switch (t) {
+            case Type::TERMINAL:o << "terminal" ;break;
+            case Type::NONTERMINAL:o << "Non terminal";break;
+            case Type::FAULTY:o << "Faulty";break;
+          };
+          return o;
+        }
+        Type getType([[maybe_unused]]NonTerminal<cc>)const{
             return Type::NONTERMINAL;
         }
-        Type getType([[maybe_unused]]Terminal<T>)const{
+        Type getType([[maybe_unused]]Terminal<cc>)const{
             return Type::TERMINAL;
         }
         union Data{
-            NonTerminal<T> n;
-            Terminal<T> t;
-            char x;
+            char x[48];
+            NonTerminal<cc> n;
+            Terminal<cc> t;
+            Data():x{""}{}
+            ~Data(){}
+            Data(const Data&){}
+            Data(const Data&&){}
+            Data& operator=(const Data&){}
+            Data& operator=(const Data&&){}
+
+            Data(NonTerminal<cc> d):n{d}{}
+            Data(Terminal<cc> d):t{d}{}
+
         };
         Type type;
         Data data;
     public:
-        rightAssociate(NonTerminal<T> x):type{Type::NONTERMINAL}{
-            data.n=x;
-        }
-        rightAssociate(Terminal<T> x):type{Type::TERMINAL}{
-            data.t=x;
-        }
-        rightAssociate():type{Type::FAULTY}{
-            data.x=char{};
+        rightAssociate(NonTerminal<cc> x):type{Type::NONTERMINAL},data{x}{}
+        rightAssociate(Terminal<cc> x):type{Type::TERMINAL},data{x}{}
+        rightAssociate():type{Type::FAULTY},data{}{
         }
         rightAssociate(const rightAssociate& r):type{r.type}{
-            if(type==Type::NONTERMINAL)
-                data.n=r.data.n;
-            else if(type==Type::TERMINAL)
-                data.t=r.data.t;
-            else
-                data.x='\0';
+          if (type == Type::NONTERMINAL)
+            data.n=r.data.n;
+          else if (type == Type::TERMINAL)
+            data.t=r.data.t;
         }
         rightAssociate(const rightAssociate&& r):type{r.type}{
-            if(type==Type::NONTERMINAL)
-                data.n=r.data.n;
-            else if(type==Type::TERMINAL)
-                data.t=r.data.t;
-            else
-                data.x='\0';
+          if (type == Type::NONTERMINAL)
+            data.n=r.data.n;
+          else if (type == Type::TERMINAL)
+            data.t=r.data.t;
         }
         rightAssociate& operator=(const rightAssociate& r){
             type=r.type;
@@ -59,8 +69,6 @@ class Rule{
                 data.n=r.data.n;
             else if(type==Type::TERMINAL)
                 data.t=r.data.t;
-            else
-                data.x='\0';
             return *this;
         }
         rightAssociate& operator=(const rightAssociate&& r){
@@ -69,8 +77,6 @@ class Rule{
                 data.n=r.data.n;
             else if(type==Type::TERMINAL)
                 data.t=r.data.t;
-            else
-                data.x='\0';
             return *this;
         }
         ~rightAssociate(){}
@@ -87,39 +93,37 @@ class Rule{
         bool operator!=(const rightAssociate r)const{
             return !(*this==r);
         }
-        First<T> getFirst(){
+        First<cc> getFirst(){
             if(type==Type::NONTERMINAL)
                 return data.n.getFirst();
             else if(type==Type::TERMINAL)
-                return First<T>{data.t};
-            return First<T>{};
+                return First<cc>{data.t};
+            return First<cc>{};
         }
-        bool operator==(NonTerminal<T> n)const{
+        bool operator==(NonTerminal<cc> n)const{
             return *this==rightAssociate{n};
         }
-        bool operator!=(NonTerminal<T> n)const{
+        bool operator!=(NonTerminal<cc> n)const{
             return *this!=rightAssociate{n};
         }
-        bool operator==(Terminal<T> n)const{
+        bool operator==(Terminal<cc> n)const{
             return *this==rightAssociate{n};
         }
-        bool operator!=(Terminal<T> n)const{
+        bool operator!=(Terminal<cc> n)const{
             return *this!=rightAssociate{n};
         }
 
     };
-
-    typedef T (*ActionType)(Parser<T>);
-
-    Rules<T>* rs=nullptr;
+    typedef cc (*ActionType)(Parser<cc>);
+    Rules<cc>* rs=nullptr;
     ActionType action=nullptr;
     vector<rightAssociate> r;
 public:
     Rule(){};
     ~Rule(){};
-    Rule(Rules<T>* sr):rs{sr}{}
-    Rule(const Rule& f):r{f.r},action{f.action},rs{f.rs}{}
-    Rule(const Rule&& f):r{f.r},action{f.action},rs{f.rs}{}
+    Rule(Rules<cc>* sr):rs{sr},r{}{}
+    Rule(const Rule& f):rs{f.rs},action{f.action},r{f.r}{}
+    Rule(const Rule&& f):rs{f.rs},action{f.action},r{f.r}{}
     Rule& operator=(const Rule& f){
         r.clear();
         for(auto i:f.r)
@@ -136,16 +140,16 @@ public:
         action=f.action;
         return *this;
     }
-    First<T> getFirst(){
-        First<T> f;
+    First<cc> getFirst(){
+        First<cc> f;
         for(auto i:r){
-            First<T> t=i.getFirst();
+            First<cc> t=i.getFirst();
             if(t.size()==1)
                 return t.size();
             else{
                 bool flag=false;
                 for(auto x:t)
-                    if(x==Terminal<T>::epsilon){
+                    if(x==Terminal<cc>::epsilon){
                         flag=true;
                         break;
                     }
@@ -160,18 +164,20 @@ public:
     }
 
     template<typename... v>
-    Rule& add(isSomething<T>& x,v&&... M){
+    Rule& add(isSomething<cc> x,v... M){
         r.push_back(rightAssociate{x});
+
         return add(M...);
     }
 
 
-    Rule& add(isSomething<T>& x){
+    Rule& add(isSomething<cc> x){
         r.push_back(rightAssociate{x});
         return *this;
     }
+
     Rule& add(){
-        r.push_back(rightAssociate{Terminal<T>::epsilon});
+        r.push_back(rightAssociate{Terminal<cc>::epsilon});
         return *this;
     }
 
@@ -180,20 +186,20 @@ public:
         action=a;
         return *this;
     }
-    T operator()(Parser<T>& x){
+    cc operator()(Parser<cc>& x){
         if(action==nullptr)
             throw ActionNotSet{};
         return action(x);
     }
-    Follow<T> getFollowOf(Grammar<T> g,NonTerminal<T> n){
+    Follow<cc> getFollowOf(Grammar<cc> g,NonTerminal<cc> n){
         bool flag=false;
-        Follow<T> f;
+        Follow<cc> f;
         for(auto i:r){
             if(flag){
                 flag=false;
-                First<T> t=i.getFirst();
+                First<cc> t=i.getFirst();
                 for(auto i:t)
-                    if(t==Terminal<T>::epsilon){
+                    if(t==Terminal<cc>::epsilon){
                         flag=true;
                         t.erase(find(t.begin(),t.end(),i));
                     }
@@ -204,26 +210,39 @@ public:
         }
         return f;
     }
-    Rules<T>& operator|(Rule r){
+    Rules<cc>& operator|(Rule r){
         return (*rs)|r;
     }
 
-    friend class Rules<T>;
+    bool operator==(Rule x)const{
+      if(rs!=x.rs || r.size()!=x.r.size())
+        return false;
+      for(int i=0;i<r.size();i++)
+        if(r[i]!=x.r[i])
+          return false;
+      return true;
+    }
+
+    bool operator!=(Rule x)const{
+      return !(*this==x);
+    }
+    friend class Rules<cc>;
 };
 
-template<typename t, typename... T>
-Rule<t> add(isSomething<t> x,T... M){
-    return Rule<t>{}.add(x,M...);
+template<typename tt,template<typename xx>typename cc, typename... VV>requires isSomething<cc<tt>,tt>
+Rule<tt> add(cc<tt> x,VV... M){
+    return Rule<tt>{}.add(x,M...);
 }
 
-template<typename t>
-Rule<t> add(isSomething<t> x){
-    return Rule<t>{}.add(x);
+template<typename tt,template<typename xx>typename cc> requires isSomething<cc<tt>,tt>
+Rule<tt> add(cc<tt> x){
+    return Rule<tt>{}.add(x);
 }
 
-template<typename t>
-Rule<t> add(){
-    return Rule<t>{}.add();
+template<typename cc>
+Rule<cc> add(){
+    return Rule<cc>{}.add();
 }
+
 
 #endif

@@ -8,34 +8,65 @@
 template<typename t=void>
 class NonTerminal{
     Rules<t>* rs=nullptr;
+    int * x=nullptr;
 public:
     NonTerminal(){}
     ~NonTerminal(){
-        if(rs!=nullptr)
-            delete rs;
+  //    cout<<"destructor"<<endl;
+      if(rs!=nullptr && x!=nullptr){
+        (*x)--;
+        if(*x==0){
+          delete x;
+          delete rs;
+        }
+      }
     }
+
     NonTerminal& operator=(const NonTerminal& n){
-        if(rs!=nullptr)
-            delete rs;
-        rs=new Rules{*(n.rs)};
+        if(rs!=nullptr && x!=nullptr){
+          if(rs!=n.rs && x!=n.x){
+            (*x)--;
+            if(*x==0){
+              delete x;
+              delete rs;
+            }
+            if(n.x!=nullptr)
+              ++(*n.x);
+          }
+        }
+        rs=n.rs;
+        x=n.x;
         return *this;
     }
     NonTerminal& operator=(const NonTerminal&& n){
-        if(rs!=nullptr)
-            delete rs;
-        rs=n.rs;
-        return *this;
+      if(rs!=nullptr && x!=nullptr){
+        (*x)--;
+        if(*x==0){
+          delete x;
+          delete rs;
+        }
+      }
+      rs=n.rs;
+      x=n.x;
+      n.rs=n.x=nullptr;
+      return *this;
     }
     NonTerminal(const NonTerminal& n){
-        rs=new Rules{*(n.rs)};
+        rs=n.rs;
+        x=n.x;
+        if(x!=nullptr)
+          (*x)++;
     }
     NonTerminal(const NonTerminal&& n){
         rs=n.rs;
+        x=n.x;
+        n.rs=n.x=nullptr;
     }
     Rules<t>* operator->(){
-        if(rs==nullptr)
+        if(rs!=nullptr)
             return rs;
         rs=new Rules<t>{this};
+        x=new int(0);
         return rs;
     }
     First<t> getFirst(){

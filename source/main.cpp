@@ -13,26 +13,45 @@ int main(int argc,char**argv){
         return -1;
     }
 
-    if(string{argv[0]}!=string{"./bin/IStudioLang"}){
+    if(!regex_match(string{argv[0]},regex{"(\\.{0,1})(.*)(/bin/IStudioLang)"})){
         cerr<<"Unknown command running"<<endl;
+        cerr<<"Command found is "<<argv[0]<<endl;
         return -1;
     }
+
 
     vector<string> options;
     for(auto i=1;i<argc-1;i++)
         options.push_back(argv[i]);
     try{
+      //  cout<<sizeof(NonTerminal<DAG>)<<endl;
+      //cout<<sizeof(Terminal<DAG>)<<endl;
 
         Terminal<DAG> function{"(function)"};
         Terminal<DAG> id{"([A-Za-z][A-Za-z0-9]*)"};
         Terminal<DAG> squareOpenBracket{"(\\[)"};
         Terminal<DAG> parenthesisOpen{"(\\()"};
         Terminal<DAG> parenthesisClose{"(\\))"};
-        Terminal<DAG> squareCloseBracket{"(])"};
+        Terminal<DAG> squareCloseBracket{"(])"},comma{","};
+        Terminal<DAG> character8{"char_8"};
+        Terminal<DAG> character16{"char_16"};
+        Terminal<DAG> character32{"char_32"};
+        Terminal<DAG> character64{"char_64"};
+        Terminal<DAG> int8{"int_8"};
+        Terminal<DAG> int16{"int_16"};
+        Terminal<DAG> int32{"int_32"};
+        Terminal<DAG> int64{"int_64"};
 
-        NonTerminal<DAG> functionDeclaration;
+        NonTerminal<DAG> functionDeclaration,returnTypeList,ParameterList,expression;
+        NonTerminal<DAG> Type,rdash;
 
-        functionDeclaration->add(function,squareOpenBracket,squareCloseBracket,id,parenthesisOpen,parenthesisClose);
+        functionDeclaration->add(function,squareOpenBracket,returnTypeList,squareCloseBracket,id,parenthesisOpen,ParameterList,parenthesisClose);
+        returnTypeList->add(Type,id,comma,rdash);
+        expression->add();
+        Type->add(character8)
+              |add(character16)
+
+              ;
 
         Grammar<DAG> g{{function,squareOpenBracket,squareCloseBracket,id},{functionDeclaration},functionDeclaration};
         Parser<DAG> p{argv[argc-1],options};
@@ -60,6 +79,7 @@ int main(int argc,char**argv){
         cout<<"\t[-l][-logger]\t\tLogger file options"<<endl<<endl;
         return 0;
     }
+
     catch(FewOptions){
         cerr<<"IStudioLang : Very few options"<<endl;
         cerr<<"Command : IStudioLang [options] filename"<<endl;
