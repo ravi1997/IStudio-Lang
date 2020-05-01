@@ -35,7 +35,9 @@ class Rule{
             Data()=default;
             ~Data()=default;
             
-            Data(const Data& d):action{d.action[0]},left{d.left}{
+            Data(const Data& d):left{d.left}{
+                for(auto x:d.action)
+                    action.emplace_back(x);
                 for(auto x:d.right){
                     right.push_back(x);
                 }
@@ -145,11 +147,13 @@ class Rule{
 
 
         Rule& operator()(function<t (const Parser<t>&)> p){
-            data->action.emplace_back(p);
+            data->action.push_back(p);
+            //cout<<data->action.size()<<endl;
             return *this;
         }
 
-        t operator()(const Parser<t>& p){
+
+        t operator()(const Parser<t>& p)const{
             return data->action[data->action.size()-1](p);
         }
 

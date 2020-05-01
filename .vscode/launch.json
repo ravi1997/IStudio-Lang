@@ -6,7 +6,12 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bin/IStudioLang",
-            "args": ["-g","${workspaceFolder}/test/t1.is"],
+            "args": [ 
+                "-g",
+                "-lf",
+                "log/logger.log",
+                "${workspaceFolder}/test/t1.is"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

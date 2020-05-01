@@ -218,10 +218,16 @@ class Parser{
                                     auto r=value2->second.getRightAssociates();
                                     
                                     NonTerminal dl{NonTerminal<t>::Dollar};
-                                    if((value2->second).hasAction())
-                                    (*dl->getThis())((value2->second).getAction());
+                                    //cout << (value2->second).hasAction()<<endl;
+                                    if ((value2->second).hasAction())
+                                        (*dl->getThis())((value2->second).getAction());
 
-                                    stack.push_back(RightAssociate{RightAssociateType::NONTERMINAL,dl});
+                                    //(value2->second)(*this);
+
+                                    if ((*dl->getThis()).hasAction())
+                                        cout<<"ok"<<endl;
+
+                                    stack.push_back(RightAssociate{RightAssociateType::NONTERMINAL, dl});
 
                                     for(auto it=r.rbegin(); it!=r.rend();it++){
                                         stack.push_back(*it);

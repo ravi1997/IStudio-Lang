@@ -1,20 +1,16 @@
 #ifndef _OPTIONS_HPP_
-#define _OPTIONS_HPP_
+#define _OPTIONS_HPP_ 1
 
+
+
+#ifndef _TYPES_HPP_
+#include<types.hpp>
+#endif // !_TYPES_HPP_
+
+
+#ifndef _LOGGER_HPP_
 #include<logger.hpp>
-
-class InvalidOption{
-    string s;
-public:
-    InvalidOption(string x):s{x}{}
-    friend ostream& operator<<(ostream& o,InvalidOption i){
-        o<<i.s;
-        return o;
-    }
-};
-
-class HelpOption{};
-class FewOptions{};
+#endif // !_LOGGER_HPP_
 
 class Options{
 private:
@@ -80,7 +76,7 @@ public:
     string getIncludePath()const{
         return includePaths;
     }
-    Logger getLoggerFile(){
+    Logger getLoggerFile()const{
         return loggerFile;
     }
 };
