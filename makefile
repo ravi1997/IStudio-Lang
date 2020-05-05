@@ -16,7 +16,7 @@ clean:
 	(rm $(Target))||true;
 
 test:
-	./$(Target) -g test/t1.is
+	./$(Target) -lf log/Logger.log -g test/t1.is
 
 setup:
 	(mkdir bin) || true;

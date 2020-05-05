@@ -1,1 +1,1 @@
-function [] myFunction()
+function myFunction()

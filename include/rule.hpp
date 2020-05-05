@@ -20,15 +20,27 @@ ostream& operator<<(ostream& o,RightAssociateType a){
     return o;
 }
 
+template<typename t>using RightAssociate = pair<RightAssociateType, variant<Terminal<t>, NonTerminal<t>>>;
+
+template<typename t>
+ostream& operator<<(ostream& o,RightAssociate<t> r){
+    switch(r.first){
+    case RightAssociateType::TERMINAL:
+        o << get<Terminal<t>>(r.second);
+        break;
+    case RightAssociateType::NONTERMINAL:
+        o << get<NonTerminal<t>>(r.second);
+        break;
+    }
+    return o;
+}
+
 
 template<typename t>
 class Rule{
-    public:
-        using RightAssociate = pair<RightAssociateType,variant<Terminal<t>,NonTerminal<t>>>;
-
     private:
         struct Data{
-            vector<RightAssociate> right;
+            vector<RightAssociate<t>> right;
             vector<function<t (const Parser<t>&)>> action;
             NonTerminal<t>* left=nullptr;
 
@@ -126,12 +138,12 @@ class Rule{
 
 
         template<typename ...V>
-        Rule& add(isRightAssociate<t> x,V... y){
+        Rule& add(isRightAssociate<t> auto x,V... y){
             data->right.push_back(pair{getType(x),x});
             return add(y...);
         }
 
-        Rule& add(isRightAssociate<t> x){
+        Rule& add(isRightAssociate<t> auto x){
             data->right.push_back(pair{getType(x),x});
             return *this;
         }
@@ -228,7 +240,7 @@ class Rule{
         }
 
 
-        vector<RightAssociate>& getRightAssociates()const{
+        vector<RightAssociate<t>>& getRightAssociates()const{
             return data->right;
         }
 

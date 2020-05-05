@@ -23,7 +23,7 @@ class Terminal{
 
         Data(string s,bool e):pattern{s},end{(e==true)?TerminalType::END : (s=="")?TerminalType::EPSILON: TerminalType::NORMAL},action{[](const Parser<t>&){}}{}
 
-        Data(isNotString a,string s="",bool e=false):pattern{s},end{(e==true)?TerminalType::END : (s=="")?TerminalType::EPSILON: TerminalType::NORMAL},action{a}{}
+        Data(isNotString auto a,string s="",bool e=false):pattern{s},end{(e==true)?TerminalType::END : (s=="")?TerminalType::EPSILON: TerminalType::NORMAL},action{a}{}
 
         Data(const Data& d):pattern{d.pattern},end{d.end},action{d.action}{}
         Data(Data&& d):pattern{move(d.pattern)},end{d.end},action{move(d.action)}{}
@@ -88,7 +88,7 @@ class Terminal{
 public:
     Terminal(string s="",bool e=false):data{make_shared<Data>(s,e)}{}
     
-    Terminal(isNotString a,string s="",bool e=false):data{make_shared<Data>(a,s,e)}{}
+    Terminal(isNotString auto a,string s="",bool e=false):data{make_shared<Data>(a,s,e)}{}
 
     Terminal(const Terminal& dt):data{dt.data}{}
     Terminal(Terminal&& dt):data{move(dt.data)}{}
@@ -152,8 +152,15 @@ public:
       return string{""};
     }
 
+    const string& getPattern()const{
+        return data->pattern;
+    }
+
     const static Terminal EPSILON;
     const static Terminal DOLLAR;
+
+    friend class Rule<t>;
+    friend class Rules<t>;
 };
 
 #endif // !_TERMINAL_HPP_

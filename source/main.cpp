@@ -51,11 +51,23 @@ int main([[maybe_unused]]int argc,[[maybe_unused]] char** argv){
         NonTerminal<int> Type{"Type"};
         NonTerminal<int> rdash{"rdash"};
 
-        functionDeclaration->add(function,squareOpenBracket,squareCloseBracket,id,parenthesisOpen,parenthesisClose)([](const Parser<int>&)->int{
-                    cout<<"correct"<<endl;
-                    return 0;
-              });
-        returnTypeList->add(Type,id,comma);
+        functionDeclaration->add(function, id, parenthesisOpen, parenthesisClose)([](const Parser<int> &) -> int {
+            cout << "correct" << endl;
+            return 0;
+        }) 
+        | add(function, squareOpenBracket, returnTypeList, squareCloseBracket, id, parenthesisOpen, parenthesisClose)
+        | add(function, id, parenthesisOpen,ParameterList, parenthesisClose)
+        | add(function, squareOpenBracket, returnTypeList, squareCloseBracket, id, parenthesisOpen, ParameterList, parenthesisClose)
+        ;
+        returnTypeList->add(Type,id,rdash);
+        rdash->add(comma,Type,id,rdash)
+        | add(comma,Type,rdash)
+        ;
+
+        ParameterList->add(Type, id, ParameterList);
+        ParameterList->add(comma, Type, id, ParameterList) 
+        | add(comma, Type, rdash);
+
         Type->add(character8) ([](const Parser<int>&)->int{
                     return 0;
               })
@@ -110,7 +122,7 @@ int main([[maybe_unused]]int argc,[[maybe_unused]] char** argv){
             p.startParsing();
         }
         catch(SyntaxError s){
-            cout<<"Syntax Error : "<<endl;
+            cout<<"Syntax Error : "<<s<<endl;
         }
 
        // cout<<"parsing completed"<<endl;

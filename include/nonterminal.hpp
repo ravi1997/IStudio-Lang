@@ -103,6 +103,9 @@ class NonTerminal{
         }
 
         const static NonTerminal Dollar;
+
+        friend class Rule<t>;
+        friend class Rules<t>;
 };
 
 

@@ -177,7 +177,6 @@ class Parser{
             }
         }
 
-        using RightAssociate = pair<RightAssociateType,variant<Terminal<t>,NonTerminal<t>>>;
 
         void startParsing() const{
             Logger lg;
@@ -185,13 +184,22 @@ class Parser{
             if(xop)
                 lg=options.getLoggerFile();
            
-            vector<RightAssociate> stack;
+            vector<RightAssociate<t>> stack;
             if(xop)
                 lg<<"Parsing status : started"<<Logger::endl;
             
-            stack.push_back(RightAssociate{RightAssociateType::NONTERMINAL,grammar.getStart()});
+            stack.push_back(RightAssociate<t>{RightAssociateType::NONTERMINAL,grammar.getStart()});
+            if (xop)
+                lg << "start symbol inserted : successfull" << Logger::endl;
             while(code!="" && stack.size()!=0){
-                
+                if(xop)
+                {
+                    lg<<"Stack size : "<<stack.size()<<Logger::endl;
+                    lg<<"Stack entries are : "<<Logger::endl;
+                    for(RightAssociate<t> i: stack)
+                        lg <<"\t"<<i<<Logger::endl;
+                }
+
                 //cout<<stack.size()<<code<<endl;
                 Terminal<t> max{Terminal<t>::EPSILON};
                 for(auto x:grammar.getTerminals()){
@@ -203,7 +211,7 @@ class Parser{
                     //cout<<stack.back().first<<endl;
                     switch(stack.back().first){
                         case RightAssociateType::NONTERMINAL: {
-                            RightAssociate top=stack.back();
+                            RightAssociate<t> top=stack.back();
                             stack.pop_back();
                             //cout<<top<<endl;
                             if(get<NonTerminal<t>>(top.second)==NonTerminal<t>::Dollar){
@@ -227,7 +235,7 @@ class Parser{
                                     if ((*dl->getThis()).hasAction())
                                         cout<<"ok"<<endl;
 
-                                    stack.push_back(RightAssociate{RightAssociateType::NONTERMINAL, dl});
+                                    stack.push_back(RightAssociate<t>{RightAssociateType::NONTERMINAL, dl});
 
                                     for(auto it=r.rbegin(); it!=r.rend();it++){
                                         stack.push_back(*it);
@@ -241,7 +249,7 @@ class Parser{
                         } 
                         break;
                         case RightAssociateType::TERMINAL: {
-                            RightAssociate top=stack.back();
+                            RightAssociate<t> top=stack.back();
                             stack.pop_back();
                             //cout<<get<Terminal<t>>(top.second)<<" == "<<max<<endl;
                             if(get<Terminal<t>>(top.second)==max){
@@ -272,15 +280,23 @@ class Parser{
                         }
                     }
                     else
-                        throw SyntaxError{};
+                        throw SyntaxError{
+                            string{"expected  : "} + max.getPattern(),
+                            line,
+                            fileName};
                 }
                 catch(...){
                     throw;
                 }
             }
             if((code!="" && code!="\n") || stack.size()!=0)
-                throw SyntaxError{};
-            
+                throw SyntaxError{
+                    (code != "" && code != "\n") ?string{"Code is not finished\nCode is : "}+code
+                    :string{"stack not empty\nStack size was : "}+to_string(stack.size()),
+                    line,
+                    fileName
+                };
+
             if(xop)
                 lg<<"Parsing status : Successfull"<<Logger::endl;
 

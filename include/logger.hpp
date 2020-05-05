@@ -68,8 +68,16 @@ public:
         return *this;
     }
 
+    Logger &operator<<(integral auto s){
+        if (type == Type::FILESTREAM)
+            file << to_string(s);
+        else
+            cout << to_string(s);
+        return *this;
+    }
 
-    ~Logger(){
+        ~Logger()
+    {
         if(type==Type::FILESTREAM)
             file.close();
     }

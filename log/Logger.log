@@ -1,17 +1,29 @@
-2020-05-01 16:50:40 : Parsing started for : /mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/test/t1.is
-2020-05-01 16:50:40 : File Opened Successfully : /mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/test/t1.is
-2020-05-01 16:50:40 : File character read : started
-2020-05-01 16:50:40 : File character read : successfull
-2020-05-01 16:50:40 : Skip Character read : started
-2020-05-01 16:50:40 : Skip Character read : successfull
-2020-05-01 16:50:40 : Parser Type : LL0
-2020-05-01 16:50:40 : LL1 Table setting : started
-2020-05-01 16:50:40 : LL1Table[functionDeclaration][(function)] = functionDeclaration -> (function) (\[) (\]) ([A-Za-z][A-Za-z0-9]*) (\() (\)) 
-2020-05-01 16:50:40 : LL1Table[returnTypeList][char_8] = returnTypeList -> Type ([A-Za-z][A-Za-z0-9]*) , 
-2020-05-01 16:50:40 : LL1Table[returnTypeList][char_16] = returnTypeList -> Type ([A-Za-z][A-Za-z0-9]*) , 
-2020-05-01 16:50:40 : LL1Table[returnTypeList][char_32] = returnTypeList -> Type ([A-Za-z][A-Za-z0-9]*) , 
-2020-05-01 16:50:40 : LL1Table[returnTypeList][char_64] = returnTypeList -> Type ([A-Za-z][A-Za-z0-9]*) , 
-2020-05-01 16:50:40 : LL1Table[Type][char_8] = Type -> char_8 
-2020-05-01 16:50:40 : LL1Table[Type][char_16] = Type -> char_16 
-2020-05-01 16:50:40 : LL1Table[Type][char_32] = Type -> char_32 
-2020-05-01 16:50:40 : LL1Table[Type][char_64] = Type -> char_64 
+2020-05-05 20:01:20 : Parsing started for : test/t1.is
+2020-05-05 20:01:20 : File Opened Successfully : test/t1.is
+2020-05-05 20:01:20 : File character read : started
+2020-05-05 20:01:20 : File character read : successfull
+2020-05-05 20:01:20 : Skip Character read : started
+2020-05-05 20:01:20 : Skip Character read : successfull
+2020-05-05 20:01:20 : Parser Type : LL0
+2020-05-05 20:01:20 : LL1 Table setting : started
+2020-05-05 20:01:20 : LL1Table[functionDeclaration][(function)] = functionDeclaration -> (function) ([A-Za-z][A-Za-z0-9]*) (\() (\)) 
+2020-05-05 20:01:20 : LL1Table[functionDeclaration][(function)] = functionDeclaration -> (function) (\[) returnTypeList (\]) ([A-Za-z][A-Za-z0-9]*) (\() (\)) 
+2020-05-05 20:01:20 : LL1Table[functionDeclaration][(function)] = functionDeclaration -> (function) ([A-Za-z][A-Za-z0-9]*) (\() ParameterList (\)) 
+2020-05-05 20:01:20 : LL1Table[functionDeclaration][(function)] = functionDeclaration -> (function) (\[) returnTypeList (\]) ([A-Za-z][A-Za-z0-9]*) (\() ParameterList (\)) 
+2020-05-05 20:01:20 : LL1Table[returnTypeList][char_8] = returnTypeList -> Type ([A-Za-z][A-Za-z0-9]*) rdash 
+2020-05-05 20:01:20 : LL1Table[returnTypeList][char_16] = returnTypeList -> Type ([A-Za-z][A-Za-z0-9]*) rdash 
+2020-05-05 20:01:20 : LL1Table[returnTypeList][char_32] = returnTypeList -> Type ([A-Za-z][A-Za-z0-9]*) rdash 
+2020-05-05 20:01:20 : LL1Table[returnTypeList][char_64] = returnTypeList -> Type ([A-Za-z][A-Za-z0-9]*) rdash 
+2020-05-05 20:01:20 : LL1Table[ParameterList][char_8] = ParameterList -> Type ([A-Za-z][A-Za-z0-9]*) ParameterList 
+2020-05-05 20:01:20 : LL1Table[ParameterList][char_16] = ParameterList -> Type ([A-Za-z][A-Za-z0-9]*) ParameterList 
+2020-05-05 20:01:20 : LL1Table[ParameterList][char_32] = ParameterList -> Type ([A-Za-z][A-Za-z0-9]*) ParameterList 
+2020-05-05 20:01:20 : LL1Table[ParameterList][char_64] = ParameterList -> Type ([A-Za-z][A-Za-z0-9]*) ParameterList 
+2020-05-05 20:01:20 : LL1Table[ParameterList][,] = ParameterList -> , Type ([A-Za-z][A-Za-z0-9]*) ParameterList 
+2020-05-05 20:01:20 : LL1Table[ParameterList][,] = ParameterList -> , Type rdash 
+2020-05-05 20:01:20 : LL1Table[Type][char_8] = Type -> char_8 
+2020-05-05 20:01:20 : LL1Table[Type][char_16] = Type -> char_16 
+2020-05-05 20:01:20 : LL1Table[Type][char_32] = Type -> char_32 
+2020-05-05 20:01:20 : LL1Table[Type][char_64] = Type -> char_64 
+2020-05-05 20:01:20 : LL1Table[rdash][,] = rdash -> , Type ([A-Za-z][A-Za-z0-9]*) rdash 
+2020-05-05 20:01:20 : LL1Table[rdash][,] = rdash -> , Type rdash 
+2020-05-05 20:01:20 : Parsing status : started
