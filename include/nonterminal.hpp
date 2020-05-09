@@ -102,6 +102,20 @@ class NonTerminal{
             return *this==NonTerminal::Dollar;
         }
 
+        Clouser<t> getClouser()const{
+            Clouser<t> f;
+
+            for(auto r: getRules()){
+                f.push_back(r.getHandleRule());
+                if (r.getHandleRule().getNextSymbol().first == RightAssociateType::NONTERMINAL){
+                    auto y = get<NonTerminal<t>>(r.getHandleRule().getNextSymbol().second).getClouser();
+                    f.insert(f.end(), y.begin(),y.end());
+                }
+            }
+            return f;
+        }
+
+
         const static NonTerminal Dollar;
 
         friend class Rule<t>;

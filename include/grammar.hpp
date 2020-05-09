@@ -86,6 +86,15 @@ class Grammar{
         NonTerminal<t>& getStart()const{
             return data->start;
         }
+        Rules<t>& getRules()const{
+            return data->rules;
+        }
+        Grammar getAugmented()const{
+            vector<NonTerminal<t>> nonterminals{getNonTerminals()};
+            NonTerminal<t> sdash;
+            sdash->add(getStart());
+            return Grammar{getTerminals(),nonterminals,sdash};
+        }
 };
 
 

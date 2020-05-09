@@ -28,18 +28,21 @@ template<typename t>class Parser;
 template<typename t>class Rule;
 template<typename t>class Rules;
 class Logger;
+template <typename t>class HandleRule;
 
+    // Utilities
 
-// Utilities
-
-template<typename t>
-using First=vector<Terminal<t>>;
+    template <typename t>
+    using First = vector<Terminal<t>>;
 
 template<typename t>
 using Follow=vector<Terminal<t>>;
 
-template<typename t,typename x>
-concept isRightAssociate=is_same<t,NonTerminal<x>>::value || is_same<t,Terminal<x>>::value;
+template <typename t>
+using Clouser = vector<HandleRule<t>>;
+
+    template <typename t, typename x>
+    concept isRightAssociate = is_same<t, NonTerminal<x>>::value || is_same<t, Terminal<x>>::value;
 
 // Exceptions List
 class ActionNotSet{};

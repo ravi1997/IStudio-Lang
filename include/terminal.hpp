@@ -11,8 +11,8 @@ enum class TerminalType{
     END
 };
 
-template<typename t>
-concept isNotString= !is_same<t,string>::value && !is_same<t,const char*>::value;
+template <typename t,typename ...Args>
+concept isNotString = (!is_same<t, string>::value && !is_same<t, const char *>::value) && invocable<t, Args...>;
 
 template<typename t>
 class Terminal{
@@ -23,7 +23,7 @@ class Terminal{
 
         Data(string s,bool e):pattern{s},end{(e==true)?TerminalType::END : (s=="")?TerminalType::EPSILON: TerminalType::NORMAL},action{[](const Parser<t>&){}}{}
 
-        Data(isNotString auto a,string s="",bool e=false):pattern{s},end{(e==true)?TerminalType::END : (s=="")?TerminalType::EPSILON: TerminalType::NORMAL},action{a}{}
+        Data(isNotString auto a, string s = "", bool e = false): pattern{s}, end{(e == true) ? TerminalType::END : (s == "") ? TerminalType::EPSILON : TerminalType::NORMAL}, action{a} {}
 
         Data(const Data& d):pattern{d.pattern},end{d.end},action{d.action}{}
         Data(Data&& d):pattern{move(d.pattern)},end{d.end},action{move(d.action)}{}

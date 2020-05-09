@@ -48,6 +48,7 @@ int main([[maybe_unused]]int argc,[[maybe_unused]] char** argv){
         NonTerminal<int> functionDeclaration{"functionDeclaration"};
         NonTerminal<int> returnTypeList{"returnTypeList"};
         NonTerminal<int> ParameterList{"ParameterList"};
+        NonTerminal<int> ParameterDash{"ParameterDash"};
         NonTerminal<int> Type{"Type"};
         NonTerminal<int> rdash{"rdash"};
 
@@ -61,12 +62,13 @@ int main([[maybe_unused]]int argc,[[maybe_unused]] char** argv){
         ;
         returnTypeList->add(Type,id,rdash);
         rdash->add(comma,Type,id,rdash)
-        | add(comma,Type,rdash)
+        | add(comma,Type,id)
         ;
 
-        ParameterList->add(Type, id, ParameterList);
-        ParameterList->add(comma, Type, id, ParameterList) 
-        | add(comma, Type, rdash);
+        ParameterList->add(Type, id, ParameterDash)
+        | add(Type,id);
+        ParameterDash->add(comma, Type, id, ParameterList) 
+        | add(comma, Type,id);
 
         Type->add(character8) ([](const Parser<int>&)->int{
                     return 0;

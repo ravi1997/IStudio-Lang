@@ -35,6 +35,20 @@ ostream& operator<<(ostream& o,RightAssociate<t> r){
     return o;
 }
 
+template <typename t>
+Logger &operator<<(Logger &o, RightAssociate<t> r)
+{
+    switch (r.first)
+    {
+    case RightAssociateType::TERMINAL:
+        o << get<Terminal<t>>(r.second);
+        break;
+    case RightAssociateType::NONTERMINAL:
+        o << get<NonTerminal<t>>(r.second);
+        break;
+    }
+    return o;
+}
 
 template<typename t>
 class Rule{
@@ -59,11 +73,19 @@ class Rule{
             Data(Data&& d):right{move(d.right)},action{move(d.action)},left{d.left}{
             }
 
-
-            Data& operator=(const Data& d){
-                right=move(d.right);
-                action=move(d.action);
+            Data &operator=(const Data &d){
+                for (auto x : d.action)
+                    action.emplace_back(x);
+                for (auto x : d.right)
+                {
+                    right.push_back(x);
+                }
                 left=d.left;
+            }
+            Data & operator=(const Data &&d){
+                right = move(d.right);
+                action = move(d.action);
+                left = d.left;
                 return *this;
             }
 
@@ -255,6 +277,11 @@ class Rule{
                 o<<*r.data;
             return o;
         }
+
+        HandleRule<t> getHandleRule()const{
+            return HandleRule<t>{data->left,{},getRightAssociates()};
+        }
+
         friend class Rules<t>;
         friend class NonTerminal<t>;
 };

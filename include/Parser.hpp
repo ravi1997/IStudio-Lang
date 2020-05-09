@@ -33,22 +33,25 @@ class Parser{
 
 
         using LookAheads = vector<Terminal<t>>;
-        using State = vector<pair<HandleRule,LookAheads>>;
+        using State = vector<pair<HandleRule<t>,LookAheads>>;
         enum class SR{
             SHIFT,
             REDUCE
         };
 
+        
+
         using Action = map<State,map<Terminal<t>,pair<SR,int>>>;
         using Goto = map<State,map<NonTerminal<t>,int>>;
-        using SLRParser = pair<Action,Goto>;
+        using CLRParser = pair<Action,Goto>;
 
         enum class ParserType{
             LL1,
-            SLR
+            SLR,
+            CLR
         };
         ParserType parserType;
-        variant<LL1Parser,SLRParser> table;
+        variant<LL1Parser,CLRParser> table;
 
 
     public:
@@ -93,8 +96,10 @@ class Parser{
 
             if(s=="LL0")
                 parserType=ParserType::LL1;
-            else
+            else if(s=="SLR" )
                 parserType=ParserType::SLR;
+            else
+                parserType=ParserType::CLR;
         }
 
 
@@ -171,6 +176,27 @@ class Parser{
                                                 }
                                             }
                                             table=lTable;
+                                        }
+                                        break;
+                case ParserType::CLR :  {
+                                            Grammar<t> Augmented=grammar.getAugmented();
+                                            auto gdash=Augmented.getStart();
+                                            State I0;
+                                            Clouser<t> c=gdash.getClouser();
+                                            int i=0;
+                                            LookAheads la;
+                                            for (HandleRule<t> hr : c)
+                                            {
+                                                if(!i)
+                                                    I0.emplace_back(pair<HandleRule<t>, LookAheads>{hr, LookAheads{Terminal<t>::DOLLAR}});
+                                                else
+                                                    I0.push_back(pair{hr,la});
+                                                la.clear();
+                                                LookAheads nextLa=hr.calculateLookAhead();
+                                                la.insert(la.end(), nextLa.begin(),nextLa.end());
+                                                i++;
+                                            }
+
                                         }
                                         break;
                 default : break;
@@ -281,7 +307,7 @@ class Parser{
                     }
                     else
                         throw SyntaxError{
-                            string{"expected  : "} + max.getPattern(),
+                            string{"expected  : "} + max.getMatch(code),
                             line,
                             fileName};
                 }
