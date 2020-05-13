@@ -1,0 +1,58 @@
+2020-05-10 18:14:29 : Parsing started for : test/t1.iFunction
+2020-05-10 18:14:29 : File Opened Successfully : test/t1.iFunction
+2020-05-10 18:14:29 : File character read : started
+2020-05-10 18:14:29 : File character read : successfull
+2020-05-10 18:14:29 : Skip Character read : started
+2020-05-10 18:14:29 : Skip Character read : successfull
+2020-05-10 18:14:29 : Parser Type : CLR
+2020-05-10 18:14:29 : Parsing Setting : started 
+2020-05-10 18:14:29 : Augmented Grammer :
+2020-05-10 18:14:29 :  -> functionDeclaration 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : functionDeclaration -> (function) exportCheck constexprCheck returnType name (\() parameterList (\)) exceptionSyntax Attributes Contracts (\{) statements (\}) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : rdash -> , returnInitialisationType Type ([A-Za-z][A-Za-z0-9]*) initialization 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : rdash -> EPSILON 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : exportCheck -> (export) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : exportCheck -> EPSILON 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : constexprCheck -> (constexpr) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : constexprCheck -> (consteval) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : constexprCheck -> EPSILON 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : returnType -> returnInitialisationType Type 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : returnType -> (\[) returnList (\]) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : returnType -> EPSILON 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : name -> ([A-Za-z][A-Za-z0-9]*) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : parameterList -> parameterInitialisationType Type ([A-Za-z][A-Za-z0-9]*) initialization (pdash) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : parameterList -> EPSILON 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : exceptionSyntax -> (throws) TypeList 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : Contracts -> (expectSyntax) (ensureSyntax) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : returnList -> returnInitialisationType Type ([A-Za-z][A-Za-z0-9]*) initialization rdash 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : returnInitialisation -> (readonly) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : returnInitialisation -> (moveonly) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : returnInitialisation -> (readmove) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : returnInitialisation -> (\[) returnInitialisationList (\]) 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : returnInitialisationList -> returnInitialisation returnInitialisationList 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : returnInitialisationList -> returnInitialisation 
+2020-05-10 18:14:29 : 
+2020-05-10 18:14:29 : Parsing Setting : Ended 

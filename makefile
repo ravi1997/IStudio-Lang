@@ -2,13 +2,13 @@ CC = g++
 CCPARAMS = -g -O3 -Wall -Wextra -std=c++2a -fconcepts -Iinclude -Isource
 PARAMS = -g -lf log/Logger.log
 Target = bin/IStudioLang
-TEST = $(wildcard test/*.is)
+TEST = $(wildcard test/*.*)
 
 Object/%.o:source/%.cpp
 	$(CC) $(CCPARAMS) $< -o $@
 
 bin/IStudioLang:clean
-	$(CC) $(CCPARAMS) source/main.cpp -o $@
+	$(CC) $(CCPARAMS) source/main.cpp -o $@ >> temp
 
 all:$(Target)
 	$(MAKE) --no-print-directory test
