@@ -61,6 +61,20 @@ class HandleRule
         {
             return !(*this == d);
         }
+        friend Logger& operator<<(Logger& l,Data& d){
+            if(d.left!=nullptr){
+                l<<*d.left<<" -> ";
+
+                for(auto r:d.beforeHandle)
+                    l<<r<<" ";
+                l<<". ";
+                for (auto r : d.AfterHandle)
+                    l << r << " ";
+            }
+            
+            return l;
+        }
+
     };
     shared_ptr<Data> data;
 
@@ -174,6 +188,14 @@ public:
         return data != nullptr &&
                h.data != nullptr &&
                !(*this == h);
+    }
+
+
+
+    friend Logger& operator<<(Logger& l,HandleRule h){
+        if(h.data!=nullptr)
+            l<<*h.data;
+        return l;
     }
 };
 

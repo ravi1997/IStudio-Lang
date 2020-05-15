@@ -70,6 +70,14 @@ public:
     }
 
     void init(){
+        Logger lg;
+        auto x = options.getLogger();
+        if (x)
+            lg = options.getLoggerFile();
+
+        if (x)
+            lg << "Parsing table : started"<< Logger::endl;
+
         Grammar<t> augmented=grammar.getAugmented();
         NonTerminal<t> s=augmented.getStart();
         vector<State<t>> states;
@@ -98,10 +106,16 @@ public:
                     ActionList.push_back(pair{I, x});
             }
 
-            if(o && act)
+            if(o && act){
+                if(actionTable.find(states[previousState])==actionTable.end())
+                    actionTable[states[previousState]] = map<Terminal<t>, pair<SR, size_t>>{};
                 actionTable[states[previousState]][get<Terminal<t>>(element)] = pair{getSR(I), distance(find(states.begin(), states.end(), I), states.begin())};
-            else
+            }
+            else if(o && !act){
+                if (gotoTable.find(states[previousState]) == gotoTable.end())
+                    gotoTable[states[previousState]] = map<NonTerminal<t>, size_t>{};
                 gotoTable[states[previousState]][get<NonTerminal<t>>(element)] = distance(find(states.begin(), states.end(), I), states.begin());
+            }
 
             previousState = distance(find(states.begin(), states.end(), I), states.begin());
             if(GotoList.size()>0){
@@ -125,6 +139,34 @@ public:
             }
             o=true;
         }while(1);
+
+        if (x)
+            lg << "States Found are : " << Logger::endl;
+        int i=0;
+
+        for(auto s:states){
+            if (x)
+                lg << "State "<<i << Logger::endl;
+        
+            for(auto h:s){
+                if (x){
+                    lg << h.first <<" ";
+                    for(auto l1:h.second)
+                        lg<< l1 <<" ";
+                    lg<<Logger::endl;
+                }
+            }
+            i++;
+        }
+
+        if (x)
+            lg << "Action Table " << Logger::endl;
+
+        for(auto [s,cols]:actionTable){
+            if (x)
+                lg << "State "<< distance(find(states.begin(),states.end(),s),states.begin()) << Logger::endl;
+        }
+
     }
 
 

@@ -23,26 +23,8 @@ class Grammar
         NonTerminal<t> start;
         Rules<t> rules;
 
-        Data(vector<Terminal<t>> ts, vector<NonTerminal<t>> ns, NonTerminal<t> s) : start{s}
-        {
-            for (auto temp : ts)
-                terminals.push_back(temp);
-            for (auto temp : ns)
-                nonterminals.push_back(temp);
-
-            for (auto n : ns)
-            {
-                try
-                {
-                    for (auto r : n.getRules())
-                        rules.add(r);
-                }
-                catch (RulesNotFoundException)
-                {
-                    //its fine as expected
-                }
-            }
-        }
+        Data(vector<Terminal<t>> ts, vector<NonTerminal<t>> ns, NonTerminal<t> s) : terminals{move(ts)},nonterminals{move(ns)},start{move(s)}
+        {}
         Data(const Data &d) : terminals{d.terminals}, nonterminals{d.nonterminals}, start{d.start} {}
         Data(Data &&d) : terminals{move(d.terminals)}, nonterminals{move(d.nonterminals)}, start{move(d.start)} {}
         Data &operator=(const Data &d)
@@ -65,7 +47,7 @@ class Grammar
     shared_ptr<Data> data;
 
 public:
-    Grammar(vector<Terminal<t>> ts, vector<NonTerminal<t>> ns, NonTerminal<t> s) : data{make_shared<Data>(ts, ns, s)} {}
+    Grammar(vector<Terminal<t>> ts, vector<NonTerminal<t>> ns, NonTerminal<t> s) : data{make_shared<Data>(move(ts), move(ns), move(s))} {}
 
     Grammar(const Grammar &g) : data{g.data} {}
     Grammar(Grammar &&g) : data{move(g.data)} {}
@@ -107,8 +89,8 @@ public:
         NonTerminal<t> sdash{"Sdash"};
         sdash->add(getStart());
         vector<NonTerminal<t>> ns=getNonTerminals();
-        ns.push_back(sdash);
-        return Grammar{getTerminals(),ns,sdash};
+        ns.emplace_back(sdash);
+        return Grammar{getTerminals(),move(ns),move(sdash)};
     }
 };
 

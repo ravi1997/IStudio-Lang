@@ -78,6 +78,23 @@ class Terminal{
             bool operator!=(const Data d)const{
                 return !(*this==d);
             }
+            friend Logger& operator<<(Logger& l,Data d){
+                switch(d.type){
+                    case TerminalType::NORMAL:
+                        l << get<string>(d.pattern);
+                        break;
+                    case TerminalType::OPERATOR:
+                        l<<"OPERATOR";
+                        break;
+                    case TerminalType::EPSILON:
+                        l << "EPSILON";
+                        break;
+                    case TerminalType::END:
+                        l<<"DOLLAR";
+                        break;
+                }
+                return l;
+            }
         };
         shared_ptr<Data> data;
     public:

@@ -1,6 +1,17 @@
-2020-05-15 10:02:46 : Parsing started for : test/t1.iFunction
-2020-05-15 10:02:46 : File Opened Successfully : test/t1.iFunction
-2020-05-15 10:02:46 : File character read : started
-2020-05-15 10:02:46 : File character read : successfull
-2020-05-15 10:02:46 : Skip Character read : started
-2020-05-15 10:02:46 : Skip Character read : successfull
+2020-05-15 13:38:14 : Parsing started for : test/t1.iFunction
+2020-05-15 13:38:14 : File Opened Successfully : test/t1.iFunction
+2020-05-15 13:38:14 : File character read : started
+2020-05-15 13:38:14 : File character read : successfull
+2020-05-15 13:38:14 : Skip Character read : started
+2020-05-15 13:38:14 : Skip Character read : successfull
+2020-05-15 13:38:14 : Parsing table : started
+2020-05-15 13:38:14 : States Found are : 
+2020-05-15 13:38:14 : State 0
+2020-05-15 13:38:14 : 
+2020-05-15 13:38:14 :  -> . S  DOLLAR 
+2020-05-15 13:38:14 : State 1
+2020-05-15 13:38:14 : 
+2020-05-15 13:38:14 :  -> . S  DOLLAR 
+2020-05-15 13:38:14 : 
+2020-05-15 13:38:14 :  -> S .  DOLLAR 
+2020-05-15 13:38:14 : Action Table 

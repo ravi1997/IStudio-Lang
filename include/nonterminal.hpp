@@ -68,6 +68,13 @@ class NonTerminal{
             return *data;
         }
 
+
+        friend Logger& operator<<(Logger& l,NonTerminal& n){
+            if(n.name!=nullptr)
+                l<<*n.name;
+            return l;
+        }
+
         friend class Rule<t>;
         friend class Rules<t>;
 };
