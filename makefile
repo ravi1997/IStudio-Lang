@@ -8,7 +8,7 @@ Object/%.o:source/%.cpp
 	$(CC) $(CCPARAMS) $< -o $@
 
 bin/IStudioLang:clean
-	$(CC) $(CCPARAMS) source/main.cpp -o $@ >> temp
+	$(CC) $(CCPARAMS) source/main.cpp -o $@
 
 all:$(Target)
 	$(MAKE) --no-print-directory test

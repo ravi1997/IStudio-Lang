@@ -1,54 +1,10 @@
 #ifndef _RULE_HPP_
 #define _RULE_HPP_ 1
 
-#ifndef _TYPES_HPP_
-#include<types.hpp>
-#endif // !_TYPES_HPP_
+#ifndef _RIGHT_ASSOCIATE_HPP_
+#include<rightassociate.hpp>
+#endif // !_RIGHT_ASSOCIATE_HPP_
 
-
-enum class RightAssociateType{
-    TERMINAL,
-    NONTERMINAL
-};
-
-ostream& operator<<(ostream& o,RightAssociateType a){
-    switch (a)
-    {
-    case RightAssociateType::TERMINAL: o<<"RightAssociate::Terminal";break;
-    case RightAssociateType::NONTERMINAL: o<<"RightAssociate::NonTerminal";break;
-    }
-    return o;
-}
-
-template<typename t>using RightAssociate = pair<RightAssociateType, variant<Terminal<t>, NonTerminal<t>>>;
-
-template<typename t>
-ostream& operator<<(ostream& o,RightAssociate<t> r){
-    switch(r.first){
-    case RightAssociateType::TERMINAL:
-        o << get<Terminal<t>>(r.second);
-        break;
-    case RightAssociateType::NONTERMINAL:
-        o << get<NonTerminal<t>>(r.second);
-        break;
-    }
-    return o;
-}
-
-template <typename t>
-Logger &operator<<(Logger &o, RightAssociate<t> r)
-{
-    switch (r.first)
-    {
-    case RightAssociateType::TERMINAL:
-        o << get<Terminal<t>>(r.second);
-        break;
-    case RightAssociateType::NONTERMINAL:
-        o << get<NonTerminal<t>>(r.second);
-        break;
-    }
-    return o;
-}
 
 template<typename t>
 class Rule{
@@ -114,6 +70,21 @@ class Rule{
                 return o;
             }
 
+            bool operator==(const Data d)const{
+                if(left!=d.left || right.size()!=d.right.size())
+                    return false;
+
+                for(size_t i=0,j=right.size();i<j;i++)
+                    if(right[i]!=d.right[i])
+                        return false;
+                
+                return true;
+            }
+
+            bool operator!=(const Data d)const{
+                return !(*this==d);
+            }
+
             //Data(NonTerminal<t>* l){}
         };
 
@@ -143,14 +114,6 @@ class Rule{
         Rule& operator=(Rule&& r){
             data=move(r.data);
             return *this;
-        }
-
-        bool operator==(Rule r)const{
-            return data==r.data;
-        }
-
-        bool operator!=(Rule r) const{
-            return !(*this == r);
         }
 
         bool operator<(Rule r)const{
@@ -209,8 +172,8 @@ class Rule{
             }
             auto & x=data->left;
             auto & y=x->data;
-            auto & z=y->rs;
-            z->push_back(r);
+        
+            y->add(r);
             //cout<<"print"<<endl;
             /*
             if(data==nullptr)
@@ -236,32 +199,6 @@ class Rule{
         }
 
 
-        bool isUnit()const{
-            if(data==nullptr)
-                throw RulesNotFoundException{};
-            return data->right.size()==1 && data->right[0].first==RightAssociateType::NONTERMINAL;
-        }
-
-
-        bool isNull()const{
-            if(data==nullptr)
-                throw RulesNotFoundException{};
-            return data->right.size()==1 && data->right[0].first==RightAssociateType::TERMINAL && std::get<Terminal<t>>(data->right[0].second)==Terminal<t>::EPSILON;
-        }
-
-        bool isLeftRecursion()const{
-            if(data==nullptr)
-                throw RulesNotFoundException{};
-            return data->right.size()>0 && data->right[0].first==RightAssociateType::NONTERMINAL && get<NonTerminal<t>>(data->right[0].second)==*data->left;
-        }
-
-        bool isDollar()const{
-            if(data==nullptr)
-                throw RulesNotFoundException{};
-            return *data->left==NonTerminal<t>::Dollar;
-        }
-
-
         vector<RightAssociate<t>>& getRightAssociates()const{
             return data->right;
         }
@@ -280,6 +217,19 @@ class Rule{
 
         HandleRule<t> getHandleRule()const{
             return HandleRule<t>{data->left,{},getRightAssociates()};
+        }
+
+        bool operator==(const Rule r)const{
+            return data!=nullptr &&
+                   r.data!=nullptr &&
+                   *data==*r.data;
+        }
+
+        bool operator!=(const Rule r) const
+        {
+            return data != nullptr &&
+                   r.data != nullptr &&
+                   *data != *r.data;
         }
 
         friend class Rules<t>;

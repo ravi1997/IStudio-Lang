@@ -1,8 +1,6 @@
 #ifndef _OPTIONS_HPP_
 #define _OPTIONS_HPP_ 1
 
-
-
 #ifndef _TYPES_HPP_
 #include<types.hpp>
 #endif // !_TYPES_HPP_

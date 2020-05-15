@@ -2,165 +2,197 @@
 #define _TERMINAL_HPP_ 1
 
 #ifndef _TYPES_HPP_
-#include<types.hpp>
+#include <types.hpp>
 #endif // !_TYPES_HPP_
 
-enum class TerminalType{
-    NORMAL,
-    EPSILON,
-    END
-};
-
-template <typename t,typename ...Args>
-concept isNotString = (!is_same<t, string>::value && !is_same<t, const char *>::value) && invocable<t, Args...>;
+#ifndef _LOGGER_HPP_
+#include<logger.hpp>
+#endif // !_LOGGER_HPP_
 
 template<typename t>
 class Terminal{
-    struct Data{
-        string pattern;
-        TerminalType end;
-        vector<function<void (const Parser<t>&)>>action;
+    public:
+        using ActionType= function<t(const Parser<t>&)>;
+        enum class TerminalType{
+            NORMAL,
+            OPERATOR,
+            EPSILON,
+            END
+        };
+    private:
+        struct Data{
+            TerminalType type=TerminalType::NORMAL;
+            variant<string,vector<string>> pattern;
+            vector<ActionType> action;
 
-        Data(string s,bool e):pattern{s},end{(e==true)?TerminalType::END : (s=="")?TerminalType::EPSILON: TerminalType::NORMAL},action{[](const Parser<t>&){}}{}
+            Data()=default;
+            Data(string s,TerminalType g):type{g},pattern{s}{}
+            Data(string s, invocable auto x, TerminalType g):type{g},pattern{s}{
+                action.push_back(x);
+            }
 
-        Data(isNotString auto a, string s = "", bool e = false): pattern{s}, end{(e == true) ? TerminalType::END : (s == "") ? TerminalType::EPSILON : TerminalType::NORMAL}, action{a} {}
+            Data(const Data& d):type{d.type},pattern{d.pattern}{
+                for (auto x : d.action)
+                    action.push_back(x);
+            }
+            Data(const Data&& d):type{move(d.type)},pattern{move(d.pattern)},action{move(d.action)}{}
 
-        Data(const Data& d):pattern{d.pattern},end{d.end},action{d.action}{}
-        Data(Data&& d):pattern{move(d.pattern)},end{d.end},action{move(d.action)}{}
+            Data& operator=(const Data& d){
+                type=d.type;
+                pattern=d.pattern;
+                
+                action.clear();
+                for(auto x:d.action)
+                    action.push_back(x);
 
-        Data& operator=(const Data& d){
-            pattern=d.pattern;
-            end=d.end;
-            action.clear();
+                return *this;
+            }
 
-            for(auto a:d.action)
-                action.push_back(a);
-            
+            Data& operator=(const Data&& d){
+                type=move(d.type);
+                pattern=move(d.pattern);
+                action=move(d.action);
+                return *this;
+            }
+
+            ~Data()=default;
+
+
+            bool operator==(const Data d)const{
+                if(type==d.type){
+                    if(type==TerminalType::NORMAL){
+                        return get<string>(pattern)==get<string>(d.pattern);
+                    }
+                    else if (type == TerminalType::OPERATOR)
+                    {
+                        return get<vector<string>>(pattern)[0]==get<vector<string>>(d.pattern)[0];
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            bool operator!=(const Data d)const{
+                return !(*this==d);
+            }
+        };
+        shared_ptr<Data> data;
+    public:
+        Terminal():data{make_shared<Data>()}{}
+        Terminal(string s="",TerminalType g=TerminalType::NORMAL):data{make_shared<Data>(s,g)}{}
+        Terminal(string s, invocable auto x, TerminalType g = TerminalType::NORMAL):data{make_shared<Data>(s,x,g)}{}
+        Terminal(const Terminal & d) : data{d.data} {}
+        Terminal(const Terminal&& d):data{move(d.data)}{}
+
+        Terminal& operator=(const Terminal& d){
+            data=d.data;
             return *this;
         }
 
-        Data& operator=(Data&& d){
-            pattern=move(d.pattern);
-            end=d.end;
-            action.clear();
-
-            action=move(d.action);         
+        Terminal& operator=(const Terminal&& d){
+            data=move(d.data);
             return *this;
         }
-        friend ostream& operator<<(ostream& o,Data& d){
-            //cout<<"ok"<<endl;
-            switch (d.end)
+        ~Terminal()=default;
+
+
+        bool operator==(const Terminal d)const{
+            return data!=nullptr &&
+                   d.data!=nullptr &&
+                   *data==*d.data; 
+        }
+
+        bool operator!=(const Terminal d) const
+        {
+            return data != nullptr &&
+                   d.data != nullptr &&
+                   *data != *d.data;
+        }
+
+
+        bool isOperator()const{
+            if(data==nullptr)
+                throw TerminalNotSetException{};
+            return data->type==TerminalType::OPERATOR;
+        }
+
+        void add(string s,invocable auto x){
+            try{
+                assert(isOperator());
+            }catch(...)
             {
-                case TerminalType::EPSILON:
-                    o<<"Epsilon(e)";
-                break;
-                case TerminalType::END:
-                    o<<"Dollar($)";
-                break;
-                default:
-                    o<<d.pattern;
-                break;
+                data=make_shared<Data>();
             }
-        
+            get<vector<string>>(data->pattern).push_back(s);
+            data->action.push_back(x);
+        }
+
+
+        First<t> getFirst()const{
+            return First<t>{*this};
+        }
+
+        string getMatch(string s) const
+        {
+            if (data == nullptr)
+                throw TerminalNotSetException{};
+            smatch m;
+            if(data->type==TerminalType::NORMAL){
+                regex_search(s, m, regex{(get<string>(data->pattern) != string{""}) ? string{"^"} + get<string>(data->pattern) : data->pattern});
+                for (auto x : m)
+                    return x;
+            }
+            else if (data->type == TerminalType::OPERATOR)
+            {
+                string max="";
+                for(auto i:get<vector<string>>(data->pattern)){
+                    regex_search(s, m, regex{(i != string{""}) ? string{"^"} + i : string{""}});
+                    for (auto x : m){
+                        if(max.length()<x.length())
+                            max=x;
+                        break;
+                    }
+                }
+                return max;
+            }
+            return string{""};
+        }
+        friend ostream &operator<<(ostream &o, const Terminal &tt)
+        {
+            if (tt.data != nullptr)
+            {
+                //o<<"ok"<<endl;
+                //cout<<(tt.data!=nullptr)<<endl;
+                if(!tt.isOperator())
+                    o << *tt.data;
+                else
+                    o << "OPERATOR";
+            }
             return o;
         }
-        friend Logger& operator<<(Logger & o,Data& d){
-            //cout<<"ok"<<endl;
-            switch (d.end)
+        friend Logger &operator<<(Logger &o, const Terminal &tt)
+        {
+            if (tt.data != nullptr)
             {
-                case TerminalType::EPSILON:
-                    o<<"Epsilon(e)";
-                break;
-                case TerminalType::END:
-                    o<<"Dollar($)";
-                break;
-                default:
-                    o<<d.pattern;
-                break;
+                //o<<"ok"<<endl;
+                //cout<<(tt.data!=nullptr)<<endl;
+                if (!tt.isOperator())
+                    o << *tt.data;
+                else
+                    o << "OPERATOR";
             }
-        
             return o;
         }
-    };
 
-    shared_ptr<Data> data;
-
-public:
-    Terminal(string s="",bool e=false):data{make_shared<Data>(s,e)}{}
-    
-    Terminal(isNotString auto a,string s="",bool e=false):data{make_shared<Data>(a,s,e)}{}
-
-    Terminal(const Terminal& dt):data{dt.data}{}
-    Terminal(Terminal&& dt):data{move(dt.data)}{}
-
-    Terminal& operator=(const Terminal& dt){
-        data=dt.data;
-        return *this;
-    }
-
-    Terminal& operator=(Terminal&& dt){
-        data=move(dt.data);
-        return *this;
-    }
-
-    bool operator==(Terminal dt) const{
-        return data==dt.data;
-    }
-
-    bool operator!=(Terminal dt)const{
-        return !(*this==dt);
-    }
-
-    bool operator<(Terminal dt)const{
-        return data->pattern<dt.data->pattern;
-    }
-
-    void operator()(const Parser<t>& p)const{
-        if(data==nullptr || data->action.size()==0)
-            throw ActionNotSet{};
-        data->action[0](p);
-    }
-
-    First<t> getFirst()const{
-        return First<t>{*this};
-    }
-
-    friend ostream& operator<<(ostream& o,const Terminal& tt){
-        if(tt.data!=nullptr){
-            //o<<"ok"<<endl;
-            //cout<<(tt.data!=nullptr)<<endl;
-            o<<*tt.data;
+        bool operator<(const Terminal tt) const{
+            return *this!=tt;
         }
-        return o;
-    }
-    friend Logger& operator<<(Logger& o,const Terminal& tt){
-        if(tt.data!=nullptr){
-            //o<<"ok"<<endl;
-            //cout<<(tt.data!=nullptr)<<endl;
-            o<<*tt.data;
-        }
-        return o;
-    }
 
-    string getMatch(string s)const {
-      if(data==nullptr)
-        throw TerminalNotSetException{};
-      smatch m;
-      regex_search(s, m, regex{(data->pattern!=string{""})?string{"^"}+data->pattern:data->pattern});
-      for(auto x:m)
-          return x;
-      return string{""};
-    }
-
-    const string& getPattern()const{
-        return data->pattern;
-    }
-
-    const static Terminal EPSILON;
-    const static Terminal DOLLAR;
-
-    friend class Rule<t>;
-    friend class Rules<t>;
+        const static Terminal EPSILON;
+        const static Terminal DOLLAR;
 };
 
 #endif // !_TERMINAL_HPP_

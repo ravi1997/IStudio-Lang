@@ -27,13 +27,12 @@ template<typename t>class NonTerminal;
 template<typename t>class Parser;
 template<typename t>class Rule;
 template<typename t>class Rules;
-class Logger;
 template <typename t>class HandleRule;
+class Logger;
 
     // Utilities
-
-    template <typename t>
-    using First = vector<Terminal<t>>;
+template <typename t>
+using First = vector<Terminal<t>>;
 
 template<typename t>
 using Follow=vector<Terminal<t>>;
@@ -41,8 +40,8 @@ using Follow=vector<Terminal<t>>;
 template <typename t>
 using Clouser = vector<HandleRule<t>>;
 
-    template <typename t, typename x>
-    concept isRightAssociate = is_same<t, NonTerminal<x>>::value || is_same<t, Terminal<x>>::value;
+template <typename t, typename x>
+concept isRightAssociate = is_same<t, NonTerminal<x>>::value || is_same<t, Terminal<x>>::value;
 
 // Exceptions List
 class ActionNotSet{};
@@ -55,6 +54,10 @@ class GrammarContainNullException{};
 class GrammarContainLeftRecursionException{};
 class GrammarContainUnitProductionException{};
 class RuleRightNotFoundException{};
+class ShiftReduce{};
+class Empty
+{
+};
 class InvalidOption{
     string s;
 public:
@@ -68,6 +71,10 @@ public:
 class HelpOption{};
 class FewOptions{};
 class FileNotFound{};
+
+#ifndef _LOGGER_HPP_
+#include<logger.hpp>
+#endif // !_LOGGER_HPP_
 
 class SyntaxError{
         string error;
@@ -88,11 +95,33 @@ class SyntaxError{
             o<<s.error;
             return o;
         }
-        
+
+        friend Logger &operator<<(Logger &o, SyntaxError s)
+        {
+            o <<s.fileName<<" "<<s.lineNumber<<" : "<< s.error;
+            return o;
+        }
 };
 
-#ifndef _LOGGER_HPP_
-#include<logger.hpp>
-#endif // !_LOGGER_HPP_
+template<typename t>
+using LookAheads=vector<Terminal<t>>;
+
+template <typename t>
+using State = vector<pair<HandleRule<t>, LookAheads<t>>>;
+
+
+enum class SR{
+    SHIFT,
+    REDUCE
+};
+
+template<typename t>
+using Action=map<State<t>,map<Terminal<t>,pair<SR,size_t>>>;
+
+template<typename t>
+using Goto=map<State<t>,map<NonTerminal<t>,size_t>>;
+
+template <typename t>
+using ParserTable = pair<Action<t>,Goto<t>>;
 
 #endif // !_TYPES_HPP_

@@ -1,6 +1,9 @@
 #ifndef _LOGGER_HPP_
-#define _LOGGER_HPP_ 1
+#define _LOGGER_HPP_ 
 
+#ifndef _TYPES_HPP_
+#include <types.hpp>
+#endif // !_TYPES_HPP_
 
 class Logger{
 private:
