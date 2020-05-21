@@ -1,5 +1,5 @@
 CC = g++
-CCPARAMS = -g -O3 -Wall -Wextra -std=c++2a -fconcepts -Iinclude -Isource
+CCPARAMS = -g -O3 -Wall -Wextra -Werror -Wshadow -std=c++2a -fconcepts -Iinclude -Isource -pedantic
 PARAMS = -g -lf log/Logger.log
 Target = bin/IStudioLang
 TEST = $(wildcard test/*.*)
@@ -14,7 +14,7 @@ all:$(Target)
 	$(MAKE) --no-print-directory test
 
 clean:
-	(rm $(Target))||true;
+	(rm bin/* log/*.*)||true;
 
 test:
 	(rm log/Logs.log)||true;

@@ -85,9 +85,7 @@ public:
         return data->rules;
     }
 
-    Grammar getAugmented()const{
-        NonTerminal<t> sdash{"Sdash"};
-        sdash->add(getStart());
+    Grammar getAugmented(NonTerminal<t> sdash)const{
         vector<NonTerminal<t>> ns=getNonTerminals();
         ns.emplace_back(sdash);
         return Grammar{getTerminals(),move(ns),move(sdash)};

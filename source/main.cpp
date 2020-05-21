@@ -29,8 +29,8 @@ int main([[maybe_unused]]int argc,[[maybe_unused]] char** argv){
             NonTerminal<int> S{"S"};
             NonTerminal<int> A{"A"};
 
-            
-
+            S->add(A, A);
+            A->add(a, A) | add(b);
 
             Grammar<int> g{
                 {
@@ -43,13 +43,21 @@ int main([[maybe_unused]]int argc,[[maybe_unused]] char** argv){
                 },
                 S
             };
+
+
+            NonTerminal<int> sdash{"sdash"};
+
+            sdash -> add(S);
+
+            //cout<<A.getFirst().size()<<endl;
+
             Parser<int> p{
                 argv[argc - 1],
                 g,
                 options,
                 {}};
   
-            p.init();
+            p.init(sdash);
 
         }
     }
@@ -74,7 +82,7 @@ int main([[maybe_unused]]int argc,[[maybe_unused]] char** argv){
         cout<<"\t[-I][-include]\t\tInclude options"<<endl;
         cout<<"\t[-o][-output]\t\tOutput file options"<<endl;
         cout<<"\t[-l][-logger]\t\tLogger file options"<<endl<<endl;
-        return 0;
+        return -1;
     }
 
     catch(FewOptions){

@@ -70,7 +70,7 @@ class Rule{
                 return o;
             }
 
-            bool operator==(const Data d)const{
+            bool operator==(const Data& d)const{
                 if(left!=d.left || right.size()!=d.right.size())
                     return false;
 
@@ -81,7 +81,9 @@ class Rule{
                 return true;
             }
 
-            bool operator!=(const Data d)const{
+            bool operator!=(const Data& d)const{
+                if (left != d.left || right.size() != d.right.size())
+                    return false;
                 return !(*this==d);
             }
 
@@ -116,7 +118,7 @@ class Rule{
             return *this;
         }
 
-        bool operator<(Rule r)const{
+        bool operator<(Rule& r)const{
             return *this!=r;
         }
 
@@ -192,6 +194,7 @@ class Rule{
             //cout<<(data->right[0].first==RightAssociateType::NONTERMINAL)<<endl;
             if(data->right[0].first==RightAssociateType::NONTERMINAL){
                 
+                //cout<<"ok"<<endl;
                 return std::get<NonTerminal<t>>(data->right[0].second).getFirst();
             }
             else 
@@ -219,13 +222,13 @@ class Rule{
             return HandleRule<t>{data->left,{},getRightAssociates()};
         }
 
-        bool operator==(const Rule r)const{
+        bool operator==(const Rule& r)const{
             return data!=nullptr &&
                    r.data!=nullptr &&
                    *data==*r.data;
         }
 
-        bool operator!=(const Rule r) const
+        bool operator!=(const Rule& r) const
         {
             return data != nullptr &&
                    r.data != nullptr &&

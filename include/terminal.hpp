@@ -95,6 +95,25 @@ class Terminal{
                 }
                 return l;
             }
+            friend ostream &operator<<(ostream &l, Data d)
+            {
+                switch (d.type)
+                {
+                case TerminalType::NORMAL:
+                    l << get<string>(d.pattern);
+                    break;
+                case TerminalType::OPERATOR:
+                    l << "OPERATOR";
+                    break;
+                case TerminalType::EPSILON:
+                    l << "EPSILON";
+                    break;
+                case TerminalType::END:
+                    l << "DOLLAR";
+                    break;
+                }
+                return l;
+            }
         };
         shared_ptr<Data> data;
     public:
@@ -116,13 +135,13 @@ class Terminal{
         ~Terminal()=default;
 
 
-        bool operator==(const Terminal d)const{
+        bool operator==(const Terminal& d)const{
             return data!=nullptr &&
                    d.data!=nullptr &&
                    *data==*d.data; 
         }
 
-        bool operator!=(const Terminal d) const
+        bool operator!=(const Terminal& d) const
         {
             return data != nullptr &&
                    d.data != nullptr &&
@@ -149,6 +168,7 @@ class Terminal{
 
 
         First<t> getFirst()const{
+            //cout<<*this<<endl;
             return First<t>{*this};
         }
 
@@ -206,6 +226,11 @@ class Terminal{
 
         bool operator<(const Terminal tt) const{
             return *this!=tt;
+        }
+
+
+        bool operator==(const NonTerminal<t> n)const{
+            return false;
         }
 
         const static Terminal EPSILON;

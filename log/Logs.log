@@ -1,17 +1,48 @@
-2020-05-15 13:38:14 : Parsing started for : test/t1.iFunction
-2020-05-15 13:38:14 : File Opened Successfully : test/t1.iFunction
-2020-05-15 13:38:14 : File character read : started
-2020-05-15 13:38:14 : File character read : successfull
-2020-05-15 13:38:14 : Skip Character read : started
-2020-05-15 13:38:14 : Skip Character read : successfull
-2020-05-15 13:38:14 : Parsing table : started
-2020-05-15 13:38:14 : States Found are : 
-2020-05-15 13:38:14 : State 0
-2020-05-15 13:38:14 : 
-2020-05-15 13:38:14 :  -> . S  DOLLAR 
-2020-05-15 13:38:14 : State 1
-2020-05-15 13:38:14 : 
-2020-05-15 13:38:14 :  -> . S  DOLLAR 
-2020-05-15 13:38:14 : 
-2020-05-15 13:38:14 :  -> S .  DOLLAR 
-2020-05-15 13:38:14 : Action Table 
+2020-05-21 21:04:30 : Parsing started for : test/t1.iFunction
+2020-05-21 21:04:30 : File Opened Successfully : test/t1.iFunction
+2020-05-21 21:04:30 : File character read : started
+2020-05-21 21:04:30 : File character read : successfull
+2020-05-21 21:04:30 : Skip Character read : started
+2020-05-21 21:04:30 : Skip Character read : successfull
+2020-05-21 21:04:30 : Parsing table : started
+2020-05-21 21:04:30 : States Found are : 
+2020-05-21 21:04:30 : State 0
+2020-05-21 21:04:30 : sdash -> . S  DOLLAR 
+2020-05-21 21:04:30 : S -> . A A  DOLLAR 
+2020-05-21 21:04:30 : A -> . a A  a b 
+2020-05-21 21:04:30 : A -> . b  a b 
+2020-05-21 21:04:30 : 
+2020-05-21 21:04:30 : State 1
+2020-05-21 21:04:30 : S -> A . A  DOLLAR 
+2020-05-21 21:04:30 : A -> . a A  DOLLAR 
+2020-05-21 21:04:30 : A -> . b  DOLLAR 
+2020-05-21 21:04:30 : 
+2020-05-21 21:04:30 : State 2
+2020-05-21 21:04:30 : S -> A A .  DOLLAR 
+2020-05-21 21:04:30 : 
+2020-05-21 21:04:30 : State 3
+2020-05-21 21:04:30 : sdash -> S .  DOLLAR 
+2020-05-21 21:04:30 : 
+2020-05-21 21:04:30 : State 4
+2020-05-21 21:04:30 : A -> b .  DOLLAR 
+2020-05-21 21:04:30 : 
+2020-05-21 21:04:30 : State 5
+2020-05-21 21:04:30 : A -> a . A  DOLLAR 
+2020-05-21 21:04:30 : A -> . a A  DOLLAR 
+2020-05-21 21:04:30 : A -> . b  DOLLAR 
+2020-05-21 21:04:30 : 
+2020-05-21 21:04:30 : State 6
+2020-05-21 21:04:30 : A -> a A .  DOLLAR 
+2020-05-21 21:04:30 : 
+2020-05-21 21:04:30 : State 7
+2020-05-21 21:04:30 : A -> b .  a b 
+2020-05-21 21:04:30 : 
+2020-05-21 21:04:30 : State 8
+2020-05-21 21:04:30 : A -> a . A  a b 
+2020-05-21 21:04:30 : A -> . a A  a b 
+2020-05-21 21:04:30 : A -> . b  a b 
+2020-05-21 21:04:30 : 
+2020-05-21 21:04:30 : State 9
+2020-05-21 21:04:30 : A -> a A .  a b 
+2020-05-21 21:04:30 : 
+2020-05-21 21:04:30 : Action Table 

@@ -69,7 +69,7 @@ public:
 
     }
 
-    void init(){
+    void init(NonTerminal<t> s){
         Logger lg;
         auto x = options.getLogger();
         if (x)
@@ -78,8 +78,8 @@ public:
         if (x)
             lg << "Parsing table : started"<< Logger::endl;
 
-        Grammar<t> augmented=grammar.getAugmented();
-        NonTerminal<t> s=augmented.getStart();
+        Grammar<t> augmented=grammar.getAugmented(s);
+        //NonTerminal<t> s=augmented.getStart();
         vector<State<t>> states;
         Action<t> actionTable;
         Goto<t> gotoTable;
@@ -90,48 +90,46 @@ public:
         vector<pair<State<t>, NonTerminal<t>>> GotoList;
         vector<pair<State<t>, Terminal<t>>> ActionList;
         State<t> I=s.getRules()[0].getHandleRule().getState(augmented,LookAheads<t>{Terminal<t>::DOLLAR});
-        states.push_back(I);
-        for (auto x : getGoto(I))
-            GotoList.push_back(pair{I, x});
-
-        for (auto x : getAction(I))
-            ActionList.push_back(pair{I, x});
-        do{
-            if(find(states.begin(),states.end(),I)==states.end()){
+        
+       do{
+            if(!find(states,I)){
+               // cout<<"new State : "<<I<<endl;
                 states.push_back(I);
-                for(auto x:getGoto(I))
-                    GotoList.push_back(pair{I,x});
+                for(auto gt:getGoto(I))
+                    GotoList.push_back(pair{I,gt});
 
-                for (auto x : getAction(I))
-                    ActionList.push_back(pair{I, x});
+                for (auto at : getAction(I))
+                    ActionList.push_back(pair{I, at});
             }
 
             if(o && act){
-                if(actionTable.find(states[previousState])==actionTable.end())
-                    actionTable[states[previousState]] = map<Terminal<t>, pair<SR, size_t>>{};
-                actionTable[states[previousState]][get<Terminal<t>>(element)] = pair{getSR(I), distance(find(states.begin(), states.end(), I), states.begin())};
+                cout<<"action : state "<<previousState<<get<Terminal<t>>(element)<<" : "<<getSR(I)<<distance(states.begin(), find(states.begin(), states.end(), I))<<endl;
+                actionTable[states[previousState]][get<Terminal<t>>(element)] = pair{getSR(I), distance(states.begin(), find(states.begin(), states.end(), I))};
             }
             else if(o && !act){
-                if (gotoTable.find(states[previousState]) == gotoTable.end())
-                    gotoTable[states[previousState]] = map<NonTerminal<t>, size_t>{};
-                gotoTable[states[previousState]][get<NonTerminal<t>>(element)] = distance(find(states.begin(), states.end(), I), states.begin());
+                cout<<"goto : state "<<previousState<<get<NonTerminal<t>>(element)<<" : "<<distance(states.begin(), find(states.begin(), states.end(), I))<<endl;
+                gotoTable[states[previousState]][get<NonTerminal<t>>(element)] = distance(states.begin(), find(states.begin(), states.end(), I));
             }
+        
 
-            previousState = distance(find(states.begin(), states.end(), I), states.begin());
             if(GotoList.size()>0){
                 State<t> temp=getNextState(augmented,GotoList.back().first,GotoList.back().second);
+                previousState = distance(states.begin(), find(states.begin(), states.end(), GotoList.back().first));
                 element = GotoList.back().second;
                 GotoList.pop_back();
                 act=false;
                 I.clear();
-                I.insert(I.begin(),temp.begin(),temp.end());
+                for (auto t1 : temp)
+                    I.push_back(t1);
             }
             else if(ActionList.size()>0){
                 State<t> temp = getNextState(augmented,ActionList.back().first, ActionList.back().second);
+                previousState = distance(states.begin(), find(states.begin(), states.end(), ActionList.back().first));
                 element = ActionList.back().second;
                 ActionList.pop_back();
                 I.clear();
-                I.insert(I.begin(), temp.begin(), temp.end());
+                for(auto t1:temp)
+                    I.push_back(t1);
                 act=true;
             }
             else{
@@ -144,31 +142,27 @@ public:
             lg << "States Found are : " << Logger::endl;
         int i=0;
 
-        for(auto s:states){
+        for(auto s1:states){
             if (x)
-                lg << "State "<<i << Logger::endl;
-        
-            for(auto h:s){
-                if (x){
-                    lg << h.first <<" ";
-                    for(auto l1:h.second)
-                        lg<< l1 <<" ";
-                    lg<<Logger::endl;
-                }
-            }
+                lg << "State "<<i << Logger::endl<<s1<<Logger::endl;
             i++;
         }
 
         if (x)
             lg << "Action Table " << Logger::endl;
+/*
+        cout<<actionTable.size()<<endl;
 
-        for(auto [s,cols]:actionTable){
-            if (x)
-                lg << "State "<< distance(find(states.begin(),states.end(),s),states.begin()) << Logger::endl;
+        //cout<<actionTable[states[0]].size()<<endl;
+
+        for (auto s1 : states){
+            cout<<"state "<<endl<<s1;
+            for(auto [key,val]:actionTable[s1]){
+                cout<<key<<" "<<val.first<<val.second<<endl;
+            }
+            
         }
-
-    }
-
+*/    }
 
     const static Terminal<t> UNARYPRE;
     const static Terminal<t> UNARYPOST;

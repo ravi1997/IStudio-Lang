@@ -23,7 +23,6 @@ class NonTerminal{
             name=n.name;
             return *this;
         }
-
         NonTerminal &operator=(const NonTerminal &&n)
         {
             data = move(n.data);
@@ -34,19 +33,19 @@ class NonTerminal{
 
         ~NonTerminal()=default;
 
-        bool operator==(const NonTerminal n) const{
-            return data!=nullptr &&
-                   n.data!=nullptr &&
-                   *data==*n.data;
-        }
-
-        bool operator!=(const NonTerminal n) const{
+        bool operator==(const NonTerminal& n) const{
             return data != nullptr &&
                    n.data != nullptr &&
-                   *data != *n.data;
+                   data == n.data;
         }
 
-        bool operator<(const NonTerminal tt) const
+        bool operator!=(const NonTerminal& n) const{
+            return data != nullptr &&
+                   n.data != nullptr &&
+                   data != n.data;
+        }
+
+        bool operator<(const NonTerminal& tt) const
         {
             return *this != tt;
         }
@@ -64,7 +63,7 @@ class NonTerminal{
             return data->getFirst();
         }
 
-        Rules<t> getRules(){
+        Rules<t>& getRules()const{
             return *data;
         }
 
@@ -73,6 +72,18 @@ class NonTerminal{
             if(n.name!=nullptr)
                 l<<*n.name;
             return l;
+        }
+
+        friend ostream &operator<<(ostream &l, NonTerminal &n)
+        {
+            if (n.name != nullptr)
+                l << *n.name;
+            return l;
+        }
+        
+        bool operator==(const Terminal<t> n) const
+        {
+            return false;
         }
 
         friend class Rule<t>;

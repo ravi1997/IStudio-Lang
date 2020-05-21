@@ -55,6 +55,7 @@ class GrammarContainLeftRecursionException{};
 class GrammarContainUnitProductionException{};
 class RuleRightNotFoundException{};
 class ShiftReduce{};
+class ReduceReduce{};
 class Empty
 {
 };
@@ -123,5 +124,9 @@ using Goto=map<State<t>,map<NonTerminal<t>,size_t>>;
 
 template <typename t>
 using ParserTable = pair<Action<t>,Goto<t>>;
+
+
+
+
 
 #endif // !_TYPES_HPP_

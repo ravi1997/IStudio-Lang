@@ -54,7 +54,7 @@ class Rules{
         return data->end();
     }
 
-    void add(Rule<t> r){
+    void add(const Rule<t>& r){
         if(data==nullptr)
             data=make_shared<vector<Rule<t>>>();
 
@@ -96,8 +96,10 @@ class Rules{
         First<t> f;
         try{
             for(auto x:*this){
+                //cout<<x<<endl;
                 try{
-                    f.insert(f.end(),x.getFirst().begin(),x.getFirst().end());
+                    for(auto u:x.getFirst())
+                        f.push_back(u);
                 }catch(...){}
             }
         }catch(...){
@@ -106,7 +108,7 @@ class Rules{
     }
 
 
-    bool operator==(const Rules r) const{
+    bool operator==(const Rules& r) const{
         if(data==nullptr || r.data==nullptr)
             return false;
         if(data->size()!=r.data->size())
@@ -116,7 +118,7 @@ class Rules{
                 return false;
         return true;
     }
-    bool operator!=(const Rules r)const
+    bool operator!=(const Rules& r)const
     {
         if (data == nullptr || r.data == nullptr)
             return false;
