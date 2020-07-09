@@ -1,33 +1,29 @@
-CC = g++
-CCPARAMS = -g -O3 -Wall -Wextra -Werror -Wshadow -std=c++2a -fconcepts -Iinclude -Isource -pedantic
-PARAMS = -g -lf log/Logger.log
-Target = bin/IStudioLang
-TEST = $(wildcard test/*.*)
+all:
+	$(MAKE) --no-print-directory stage1
+	$(MAKE) --no-print-directory stage2
+	$(MAKE) --no-print-directory stage3
 
-Object/%.o:source/%.cpp
-	$(CC) $(CCPARAMS) $< -o $@
 
-bin/IStudioLang:clean
-	$(CC) $(CCPARAMS) source/main.cpp -o $@
+run1:
+	$(MAKE) --no-print-directory -C stageI run
 
-all:$(Target)
-	$(MAKE) --no-print-directory test
+
+stage1:
+	$(MAKE) --no-print-directory -C stageI all
+
+stage2:
+	$(MAKE) --no-print-directory all
+
+stage3:
+	cd stage\ III
+	$(MAKE) --no-print-directory all
 
 clean:
-	(rm bin/* log/*.*)||true;
+	cd stage\ I
+	$(MAKE) --no-print-directory clean
+	cd stage\ II
+	$(MAKE) --no-print-directory clean
+	cd stage\ III
+	$(MAKE) --no-print-directory clean
 
-test:
-	(rm log/Logs.log)||true;
-	for x in $(TEST); do ./$(Target) $(PARAMS) $$x; cat log/Logger.log >> log/Logs.log; done
-
-setup:
-	(mkdir bin) || true;
-	(mkdir include) || true;
-	(mkdir source) || true;
-	(mkdir Object) || true;
-	echo '' >> source/main.cpp
-
-debug:clean $(Target)
-	gdb ./$(Target)
-
-.PHONY: all test clean setup debug
+.PHONY: all clean stage1 stage2 stage3 preprocess
