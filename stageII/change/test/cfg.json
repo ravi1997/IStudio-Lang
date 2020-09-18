@@ -1,0 +1,5 @@
+{
+    "NonTerminal":"test/nonTerminal",
+    "Terminal":"test/terminal",
+    "Rule": "test/rule"
+}

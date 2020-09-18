@@ -1,28 +1,31 @@
 CC = g++
-CCPARAMS = -ggdb -O3 -Wall -Wextra -Werror -Wshadow -std=c++2a -fconcepts -pedantic
+CCPARAMS = -ggdb -O3 -Wall -Wextra -Werror -Wshadow -std=c++2a -Iinclude -Isource -Itest -pedantic
 PARAMS = -g -lf log/Logger.log
-Target = bin/IStudioLang
+Target = bin/compiler
 
 Object/%.o:source/%.cpp
 	$(CC) $(CCPARAMS) $< -o $@
 
-bin/IStudioLang:clean
-	$(CC) $(CCPARAMS) main.cpp -o $@
-
-all:$(Target)
-	./$(Target) -lf log/logger.log -I test/config.json iFunction
+$(Target):clean
+	$(CC) $(CCPARAMS) source/main.cpp -o $@
 
 clean:
-	(rm bin/* log/*.*)||true;
+	(rm bin/* log/*.* output/*.* intermediate)||true;
+
+run:
+	./$(Target) output/main.cpp test/cfg.json
 
 setup:
-	(mkdir log) || true;
-	(mkdir test) || true;
 	(mkdir bin) || true;
-	(mkdir output) || true;
-	e cho '' >> source/main.cpp
+	(mkdir include) || true;
+	(mkdir source) || true;
+	(mkdir Object) || true;
+	echo '' >> source/main.cpp
 
 debug:clean $(Target)
 	gdb ./$(Target)
+
+all:$(Target)
+	$(MAKE) --no-print-directory run
 
 .PHONY: all test clean setup debug

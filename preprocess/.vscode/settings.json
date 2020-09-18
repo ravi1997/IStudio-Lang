@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.iClass": "plaintext",
+        "unordered_map": "cpp"
+    }
+}

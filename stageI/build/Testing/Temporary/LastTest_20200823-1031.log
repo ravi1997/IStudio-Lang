@@ -1,0 +1,209 @@
+Start testing: Aug 23 16:01 IST
+----------------------------------------------------------
+1/1 Testing: Comptest/cfg.json
+1/1 Test: Comptest/cfg.json
+Command: "/mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageI/change/bin/IStudioLang" "test/cfg.json"
+Directory: /mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageI/change/build
+"Comptest/cfg.json" start time: Aug 23 16:01 IST
+Output:
+----------------------------------------------------------
+NonTerminals : functionDeclaration exportCheck constexprCheck returnType name parameterList exceptionSyntax contracts returnInitialisationType returnInitialisationList Type returnList Initialisation rdash returnInitialisation parameterInitialisation pdash parameterInitialisationType parameterInitialisationList exceptionList exceptionListDash exceptSyntax ensureSyntax 
+Terminals : function squareOpen squareClose ID parenthesisOpen parenthesisClose curlyOpen curlyClose comma Return readOnly writeOnly moveOnly readWrite readMove writeMove Export Constexpr Consteval Nullptr throws Expect Ensures Int_8 Int_16 Int_32 Int_64 Uint_8 Uint_16 Uint_32 Uint_64 char_8 char_16 char_32 Float Double Byte Equal comma Return identifier 
+Start Symbol : functionDeclaration
+Rules :
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parameterList parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parameterList parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parameterList parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parameterList parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parameterList parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parameterList parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parameterList parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parameterList parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parenthesisClose contracts curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parameterList parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parameterList parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parameterList parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parameterList parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parameterList parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parameterList parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parameterList parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parameterList parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parenthesisClose curlyOpen curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : exportCheck -> Export 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : constexprCheck -> Constexpr 
+Rule : constexprCheck -> Consteval 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parameterList parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : returnType -> returnInitialisationType Type 
+Rule : returnType -> squareOpen returnList squareClose 
+Rule : name -> identifier 
+Rule : name -> operatorOverload 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parenthesisClose exceptionSyntax contracts curlyOpen statements curlyClose 
+Rule : parameterList -> parameterInitialisationType Type identifier Initialisation pdash 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parameterList parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parameterList parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parameterList parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parameterList parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parameterList parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parameterList parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parameterList parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parameterList parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parenthesisClose contracts curlyOpen statements curlyClose 
+Rule : exceptionSyntax -> throws exceptionList 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parameterList parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parenthesisClose exceptionSyntax curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parameterList parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parameterList parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parameterList parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parameterList parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parameterList parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parameterList parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parameterList parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parameterList parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck returnType name parenthesisOpen parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck returnType name parenthesisOpen parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck returnType name parenthesisOpen parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function returnType name parenthesisOpen parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck constexprCheck name parenthesisOpen parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function constexprCheck name parenthesisOpen parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function exportCheck name parenthesisOpen parenthesisClose curlyOpen statements curlyClose 
+Rule : functionDeclaration -> function name parenthesisOpen parenthesisClose curlyOpen statements curlyClose 
+Rule : contracts -> exceptSyntax ensureSyntax 
+Rule : contracts -> exceptSyntax 
+Rule : contracts -> ensureSyntax 
+Rule : returnInitialisationType -> returnInitialisation 
+Rule : returnInitialisationType -> squareOpen returnInitialisationList squareClose 
+Rule : returnInitialisationList -> returnInitialisation 
+Rule : returnInitialisationList -> returnInitialisation returnInitialisationList 
+Rule : Type -> Int_8 
+Rule : Type -> Int_16 
+Rule : Type -> Int_32 
+Rule : Type -> Int_64 
+Rule : Type -> Uint_8 
+Rule : Type -> Uint_16 
+Rule : Type -> Uint_32 
+Rule : Type -> Uint_64 
+Rule : returnList -> returnInitialisationType Type identifier Initialisation rdash 
+Rule : rdash -> comma returnInitialisationType Type identifier Initialisation rdash 
+Rule : returnInitialisation -> readOnly 
+Rule : returnInitialisation -> moveOnly 
+Rule : returnInitialisation -> readMove 
+Rule : parameterInitialisation -> readOnly 
+Rule : parameterInitialisation -> moveOnly 
+Rule : parameterInitialisation -> readMove 
+Rule : parameterInitialisation -> writeOnly 
+Rule : parameterInitialisation -> readWrite 
+Rule : parameterInitialisation -> writeMove 
+Rule : pdash -> comma parameterInitialisationType Type identifier Initialisation pdash 
+Rule : parameterInitialisationType -> parameterInitialisation 
+Rule : parameterInitialisationType -> squareOpen parameterInitialisationList squareClose 
+Rule : parameterInitialisationList -> parameterInitialisation 
+Rule : parameterInitialisationList -> parameterInitialisation parameterInitialisationList 
+Rule : exceptionList -> Type exceptionListDash 
+Rule : exceptionListDash -> comma Type exceptionListDash 
+Rule : exceptSyntax -> squareOpen squareOpen Expect colon squareClose squareClose 
+Rule : ensureSyntax -> squareOpen squareOpen Ensures colon squareClose squareClose 
+Rule : returnType -> Type 
+Rule : returnList -> Type identifier Initialisation rdash 
+Rule : rdash -> comma Type identifier Initialisation rdash 
+Rule : returnList -> returnInitialisationType Type identifier Initialisation 
+Rule : rdash -> comma returnInitialisationType Type identifier Initialisation 
+Rule : returnList -> Type identifier Initialisation 
+Rule : rdash -> comma Type identifier Initialisation 
+Rule : parameterList -> parameterInitialisationType Type identifier Initialisation 
+Rule : pdash -> comma parameterInitialisationType Type identifier Initialisation 
+Rule : parameterList -> Type identifier Initialisation pdash 
+Rule : pdash -> comma Type identifier Initialisation pdash 
+Rule : parameterList -> Type identifier Initialisation 
+Rule : pdash -> comma Type identifier Initialisation 
+Rule : exceptionList -> Type 
+Rule : exceptionListDash -> comma Type 
+
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"Comptest/cfg.json" end time: Aug 23 16:01 IST
+"Comptest/cfg.json" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 23 16:01 IST

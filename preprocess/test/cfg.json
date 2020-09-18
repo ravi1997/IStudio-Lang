@@ -1,0 +1,4 @@
+{"nonterminal":"test/nonterminal",
+"terminal":"test/terminal",
+"rules":"test/rules",
+"startsymbol":"functiondeclaration"}

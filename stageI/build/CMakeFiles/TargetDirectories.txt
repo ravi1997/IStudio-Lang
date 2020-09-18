@@ -1,0 +1,4 @@
+/mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageI/change/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageI/change/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageI/change/build/CMakeFiles/test.dir
+/mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageI/change/build/CMakeFiles/IStudioLang.dir

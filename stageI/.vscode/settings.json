@@ -1,0 +1,35 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "*.iClass": "plaintext",
+        "cstdio": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "functional": "cpp",
+        "ranges": "cpp",
+        "variant": "cpp",
+        "ostream": "cpp",
+        "numeric": "cpp",
+        "type_traits": "cpp"
+    },
+    "C_Cpp.dimInactiveRegions": false,
+    "cSpell.words": [
+        "rdash"
+    ],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/build": false,
+        "build": false,
+        "**/.vscode": true,
+        ".vscode": true,
+        "**/.history": true,
+        ".history": true
+    },
+    "explorerExclude.backup": null,
+    "code-runner.clearPreviousOutput": true
+}

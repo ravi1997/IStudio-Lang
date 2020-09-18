@@ -1,152 +1,170 @@
-#ifndef _TYPES_HPP_
-#define _TYPES_HPP_ 1
+#ifndef __TYPES_HPP__
+#define __TYPES_HPP__
 
-#include <chrono>  // chrono::system_clock
-#include <concepts>
-#include <ctime>   // localtime
-#include <functional>
-#include <fstream>
+#pragma once
+
+#include <experimental/source_location>
 #include <iostream>
 #include <memory>
-#include <regex>
-//#include <sstream>
-#include <climits>
-#include <iomanip> // put_time
 #include <string>
-#include <type_traits>
 #include <variant>
 #include <vector>
-#include<cassert> 
+#include <fstream>
 using namespace std;
 
-// forward declarations
-
-template<typename t>class Terminal;
-template<typename t>class NonTerminal;
-template<typename t>class Parser;
-template<typename t>class Rule;
-template<typename t>class Rules;
-template <typename t>class HandleRule;
-template<typename t>class Grammar;
-class Logger;
-class FlowControlNode;
-
-
-    // Utilities
 template <typename t>
-using First = vector<Terminal<t>>;
-
-template<typename t>
-using Follow=vector<Terminal<t>>;
-
+class NonTerminal;
 template <typename t>
-using Clouser = vector<HandleRule<t>>;
+class Terminal;
+template <typename t>
+class Rule;
+template <typename t>
+class Rules;
+template <typename t>
+class Grammar;
+class FlowControl;
 
-template <typename t, typename x>
-concept isRightAssociate = is_same<t, NonTerminal<x>>::value || is_same<t, Terminal<x>>::value;
-
-// Exceptions List
-class ActionNotSet{};
-class GrammarNotFoundException{};
-class RulesNotFoundException{};
-class InvalidGrammarException{};
-class TerminalNotSetException{};
-class InfiniteGrammarFoundException{};
-class GrammarContainNullException{};
-class GrammarContainLeftRecursionException{};
-class GrammarContainUnitProductionException{};
-class RuleRightNotFoundException{};
-class ShiftReduce{};
-class ReduceReduce{};
-class Empty
+enum class TerminalType
 {
+    NORMAL,
+    DOLLAR,
+    EPSILON,
+    OPERATOR
 };
-class InvalidOption{
-    string s;
+
+///////////////////////////////////////////////////////////////////////////////////////
+//                                EXCEPTIONS                                         //
+///////////////////////////////////////////////////////////////////////////////////////
+class Exception
+{
+private:
+    unsigned int line = 0;
+    string fileName = "";
+    string description = "";
+
 public:
-    InvalidOption(string x):s{x}{}
-    friend ostream& operator<<(ostream& o,InvalidOption i){
-        o<<i.s;
-        return o;
+    Exception(unsigned int l, string f, string des)
+        : line{l}, fileName{f}, description{des} {}
+
+    template <typename stream>
+    friend stream &operator<<(stream &s, const Exception &e)
+    {
+        s << e.fileName << ":" << e.line << ":" << e.description;
+        return s;
     }
 };
 
-class HelpOption{};
-class FewOptions{};
-class FileNotFound{
-        string file="";
-    public:
-        FileNotFound() = default;
-        ~FileNotFound() = default;
-        FileNotFound& operator=(const FileNotFound&) = default;
-
-        FileNotFound(const FileNotFound&)=default;
-
-        FileNotFound(string s):file{s}{}
-
-
-        friend ostream& operator<<(ostream& e,FileNotFound f){
-            e<<f.file;
-            return e;
-        }
+class TerminalNotSet : public Exception
+{
+public:
+    TerminalNotSet(const std::experimental::source_location &location =
+                       std::experimental::source_location::current())
+        : Exception(location.line(), location.file_name(), "TerminalNotSet") {}
 };
 
-#ifndef _LOGGER_HPP_
-#include<logger.hpp>
-#endif // !_LOGGER_HPP_
-
-class SyntaxError{
-        string error;
-        unsigned int lineNumber;
-        string fileName;
-        string description;
-    public:
-        SyntaxError()=default;
-        ~SyntaxError()=default;
-        SyntaxError(const SyntaxError&)=default;
-        SyntaxError(SyntaxError&&)=default;
-        SyntaxError& operator=(const SyntaxError&)=default;
-        SyntaxError& operator=(SyntaxError&&)=default;
-
-        SyntaxError(string s,unsigned int x,string f,string des=""):error{s},lineNumber{x},fileName{f},description{des}{}
-
-        friend ostream& operator<<(ostream& o,SyntaxError s){
-            o<<s.error;
-            return o;
-        }
-
-        friend Logger &operator<<(Logger &o, SyntaxError s)
-        {
-            o <<s.fileName<<" "<<s.lineNumber<<" : "<< s.error;
-            return o;
-        }
+class RulesNotSet : public Exception
+{
+public:
+    RulesNotSet(const std::experimental::source_location &location =
+                    std::experimental::source_location::current())
+        : Exception(location.line(), location.file_name(), "RulesNotSet") {}
 };
 
-template<typename t>
-using LookAheads=vector<Terminal<t>>;
-
-template <typename t>
-using State = vector<pair<HandleRule<t>, LookAheads<t>>>;
-
-
-enum class SR{
-    SHIFT,
-    REDUCE,
-    EMPTY
+class FileNotFound : public Exception
+{
+public:
+    FileNotFound(const std::experimental::source_location &location =
+                     std::experimental::source_location::current())
+        : Exception(location.line(), location.file_name(), "FileNotFound") {}
 };
 
-template<typename t>
-using Action=map<int,map<int,pair<SR,size_t>>>;
+class RuleNotSet : public Exception
+{
+public:
+    RuleNotSet(const std::experimental::source_location &location =
+                   std::experimental::source_location::current())
+        : Exception(location.line(), location.file_name(), "RuleNotSet") {}
+};
 
-template<typename t>
-using Goto=map<int,map<int,size_t>>;
+class GrammarNotSet : public Exception
+{
+public:
+    GrammarNotSet(const std::experimental::source_location &location =
+                      std::experimental::source_location::current())
+        : Exception(location.line(), location.file_name(), "GrammarNotSet") {}
+};
+
+class CompilerError : public Exception
+{
+public:
+    CompilerError(const string s, const std::experimental::source_location &location =
+                                      std::experimental::source_location::current())
+        : Exception(location.line(), location.file_name(), string{"CompilerError : "} + s) {}
+};
+
+class NonTerminalNotSet : public Exception
+{
+public:
+    NonTerminalNotSet(const std::experimental::source_location &location =
+                          std::experimental::source_location::current())
+        : Exception(location.line(), location.file_name(), "NonTerminalNotSet : ") {}
+};
+
+class BadAlloc : public Exception
+{
+public:
+    BadAlloc(const std::experimental::source_location &location =
+                 std::experimental::source_location::current())
+        : Exception(location.line(), location.file_name(), "BadAlloc : ") {}
+};
+
+class RightAssociateNotSet : public Exception
+{
+public:
+    RightAssociateNotSet(const std::experimental::source_location &location =
+                             std::experimental::source_location::current())
+        : Exception(location.line(), location.file_name(), "RightAssociateNotSet : ") {}
+};
+
+class RulesEmpty : public Exception
+{
+public:
+    RulesEmpty(const std::experimental::source_location &location =
+                   std::experimental::source_location::current())
+        : Exception(location.line(), location.file_name(), "RulesEmpty : ") {}
+};
+
+#define stringify(s) #s
+#define PARSERTYPE FlowControl
+
+#define NONTERMINALTYPE NonTerminal<PARSERTYPE>
+#define TERMINALTYPE Terminal<PARSERTYPE>
+#define RULESTYPE Rules<PARSERTYPE>
+#define RULETYPE Rule<PARSERTYPE>
+#define GRAMMAR Grammar<PARSERTYPE>
+
+enum class RightAssociateType
+{
+    TERMINALOBJ,
+    NONTERMINALOBJ
+};
+
+using RightAssociate = pair<RightAssociateType, variant<shared_ptr<NONTERMINALTYPE>, shared_ptr<TERMINALTYPE>>>;
+
+#include <shared_ptr.hpp>
+
+#define NONTERMINAL shared_ptr<NONTERMINALTYPE>
+#define TERMINAL shared_ptr<TERMINALTYPE>
+#define RULES shared_ptr<RULESTYPE>
+#define RULE shared_ptr<RULETYPE>
+#define RIGHTASSOCIATE shared_ptr<RightAssociate>
+
+#define N(name) \
+    NONTERMINAL name { stringify(name) }
+#define T(name, pat) \
+    TERMINAL name { stringify(name), pat }
 
 template <typename t>
-using ParserTable = pair<Action<t>,Goto<t>>;
+concept isRightAssociate = is_same<t, NONTERMINAL>::value || is_same<t, TERMINAL>::value;
 
-template <typename t>
-using Token = pair<Terminal<t>, string>;
-
-class Successfull{};
-
-#endif // !_TYPES_HPP_
+#endif //__TYPES_HPP__

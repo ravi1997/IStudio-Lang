@@ -1,105 +1,104 @@
-#ifndef _NON_TERMINAL_HPP_
-#define _NON_TERMINAL_HPP_ 1
+#ifndef _NONTERMINAL_HPP_
+#define _NONTERMINAL_HPP_
 
-#ifndef _TYPES_HPP_
+#ifndef __TYPES_HPP__
 #include <types.hpp>
-#endif // !_TYPES_HPP_
+#endif
 
-template<typename t>
-class NonTerminal{
-    private:
+#ifndef _RULES_HPP_
+#include <rules.hpp>
+#endif
 
-        shared_ptr<Rules<t>> data;
-        shared_ptr<string> name;
+template <>
+class NonTerminal<PARSERTYPE>
+{
+private:
+    struct Data
+    {
+        string name = "";
+        RULESTYPE rules;
 
-    public:
+        Data(string s) : name{s} {}
+        ~Data()
+        {
+            rules.removeAll();
+        }
 
-        NonTerminal(string s=""):data{make_shared<Rules<t>>()},name{make_shared<string>(s)}{}
-        NonTerminal(const NonTerminal &n) : data{n.data}, name{n.name} {}
-        NonTerminal(const NonTerminal &&n) : data{move(n.data)}, name{move(n.name)} {}
-
-        NonTerminal& operator=(const NonTerminal& n){
-            data=n.data;
-            name=n.name;
+        Data &operator=(const Data &d)
+        {
+            name = d.name;
+            rules = d.rules;
             return *this;
         }
-        NonTerminal &operator=(const NonTerminal &&n)
+
+        Data &operator=(const Data &&d)
         {
-            data = move(n.data);
-            name = move(n.name);
+            name = move(d.name);
+            rules = move(d.rules);
             return *this;
         }
 
-
-        ~NonTerminal()=default;
-
-        bool operator==(const NonTerminal& n) const{
-            return data != nullptr &&
-                   n.data != nullptr &&
-                   data == n.data;
-        }
-
-        bool operator!=(const NonTerminal& n) const{
-            return data != nullptr &&
-                   n.data != nullptr &&
-                   data != n.data;
-        }
-
-        bool operator<(const NonTerminal& tt) const
+        bool operator==(const Data &d) const
         {
-            return *this != tt;
+            return name == d.name;
         }
 
-        Rule<t>* operator->(){
-            if(data==nullptr)
-                data=make_shared<Rules<t>>();
-        
-            Rule<t> r{this};
-            data->add(r);
-            return (*data)[data->size()-1].getThis();
-        }
-
-        void add(Rule<t>& r){
-            data->add(r);
-        }
-
-        First<t> getFirst()const{
-            return data->getFirst();
-        }
-
-        Rules<t>& getRules()const{
-            return *data;
-        }
-
-
-        friend Logger& operator<<(Logger& l,const NonTerminal& n){
-            if(n.name!=nullptr)
-                l<<*n.name;
-            return l;
-        }
-
-        friend ostream &operator<<(ostream &l,const NonTerminal &n)
+        bool operator!=(const Data &d) const
         {
-            if (n.name != nullptr)
-                l << *n.name;
-            return l;
+            return name != d.name;
         }
-        
-        bool operator==(const Terminal<t> n) const
-        {
-            return false;
-        }
+    };
 
-        auto getThis(){
-            return this;
-        }
+    shared_ptr<Data> data;
 
-        void removeRule(const Rule<t>& r){
-            data->remove(r);
-        }
+public:
+    NonTerminal(string s) : data{make_shared<Data>(s)} {}
+    NonTerminal(const NonTerminal &n) : data{n.data} {}
+    NonTerminal(NonTerminal &&n) : data{move(n.data)} {}
 
-        friend class Rule<t>;
-        friend class Rules<t>;
+    void add(const RULE &r) const
+    {
+        if (data != nullptr)
+            data->rules.add(r);
+    }
+
+    bool operator==(const NonTerminal &n) const
+    {
+        return data != nullptr && n.data != nullptr && *data == *n.data;
+    }
+
+    bool operator!=(const NonTerminal &n) const
+    {
+        return data != nullptr && n.data != nullptr && *data != *n.data;
+    }
+
+    RULE &operator->() const
+    {
+        return data->rules.back();
+    }
+
+    RULESTYPE &getRules() const
+    {
+        if (data == nullptr)
+            throw NonTerminalNotSet{};
+        return data->rules;
+    }
+
+    string &getName() const
+    {
+        if (data == nullptr)
+            throw NonTerminalNotSet{};
+        return data->name;
+    }
+
+    template <typename stream>
+    friend stream &operator<<(stream &s, NonTerminal &n)
+    {
+        if (n.data != nullptr)
+            if (n.data->name != "")
+                s << n.getName();
+        return s;
+    }
 };
 
-#endif // !_NON_TERMINAL_HPP_
+#endif // _NONTERMINAL_HPP_

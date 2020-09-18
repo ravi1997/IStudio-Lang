@@ -1,335 +1,226 @@
-#ifndef _RULE_HPP_
-#define _RULE_HPP_ 1
+#ifndef __RULE_HPP__
+#define __RULE_HPP__
 
-#ifndef _RIGHT_ASSOCIATE_HPP_
-#include<rightassociate.hpp>
-#endif // !_RIGHT_ASSOCIATE_HPP_
+#pragma once
 
+#ifndef __TYPES_HPP__
+#include <types.hpp>
+#endif
 
-template<typename t>
-class Rule{
-    private:
-        struct Data{
-            vector<RightAssociate<t>> right;
-            vector<function<t (const Parser<t>&)>> action;
-            NonTerminal<t>* left=nullptr;
+#include <rightassociate.hpp>
 
-            Data()=default;
-            ~Data()=default;
-            Data(NonTerminal<t>* l):left{l}{}
-            Data(NonTerminal<t>* l,vector<RightAssociate<t>> a,vector<RightAssociate<t>> b):left{l}{
-                for(auto x:a)
-                    right.push_back(x);
-                for(auto x:b)
-                    right.push_back(x);
-            }
-            Data(const Data& d):left{d.left}{
-                for(auto x:d.action)
-                    action.emplace_back(x);
-                for(auto x:d.right){
-                    right.push_back(x);
-                }
-            }
+template <>
+class Rule<PARSERTYPE>
+{
+private:
+    // using actionType = function<t(Parser<t>&)>;
+    struct Data
+    {
+        NONTERMINAL left;
+        vector<RIGHTASSOCIATE> right;
+        // actionType action;
 
+        Data() {}
+        Data(const NONTERMINAL &s) : left{s} {}
+        Data(const Data &d) : left{d.left}
+        {
+            for (auto r : d.right)
+                right.push_back(r);
+        }
 
-            Data(Data&& d):right{move(d.right)},action{move(d.action)},left{d.left}{
-            }
+        Data(Data &&d) : left{move(d.left)}, right{move(d.right)} {}
 
-            Data &operator=(const Data &d){
-                for (auto x : d.action)
-                    action.emplace_back(x);
-                for (auto x : d.right)
+        template <typename Stream>
+        friend Stream &operator<<(Stream &o, const Data &d)
+        {
+
+            if (d.left != nullptr)
+                o << d.left << " -> add(";
+
+            // o << "here" << endl;
+
+            if (d.right.size() != 0)
+                for (auto r : d.right)
                 {
-                    right.push_back(x);
+                    // o << "here" << endl;
+                    o << r << ",";
                 }
-                left=d.left;
-            }
-            Data & operator=(const Data &&d){
-                right = move(d.right);
-                action = move(d.action);
-                left = d.left;
-                return *this;
-            }
+            o << ");";
+            return o;
+        }
 
-            friend ostream& operator<<(ostream& o,const Data& d){
-                if(d.left!=nullptr)
-                    o<<*d.left<<" -> ";
-                for(auto r:d.right){
-                    switch(r.first){
-                        case RightAssociateType::TERMINAL: o<<get<Terminal<t>>(r.second);break;
-                        case RightAssociateType::NONTERMINAL: o<<get<NonTerminal<t>>(r.second);break;
-                    }
-                    o<<" ";
-                }
-                return o;
-            }
-            friend Logger& operator<<(Logger& o,const Data& d){
-                if(d.left!=nullptr)
-                    o<<*d.left<<" -> ";
-                for(auto r:d.right){
-                    switch(r.first){
-                        case RightAssociateType::TERMINAL: o<<get<Terminal<t>>(r.second);break;
-                        case RightAssociateType::NONTERMINAL: o<<get<NonTerminal<t>>(r.second);break;
-                    }
-                    o<<" ";
-                }
-                return o;
-            }
+        bool operator==(const Data &d) const
+        {
+            if (left != d.left || right.size() != d.right.size())
+                return false;
 
-            bool operator==(const Data& d)const{
-                if(left!=d.left || right.size()!=d.right.size())
+            for (size_t i = 0, j = right.size(); i < j; i++)
+                if (right[i] != d.right[i])
                     return false;
 
-                for(size_t i=0,j=right.size();i<j;i++)
-                    if(right[i]!=d.right[i])
-                        return false;
-                
+            return true;
+        }
+
+        bool operator!=(const Data &d) const
+        {
+            if (left != d.left || right.size() != d.right.size())
                 return true;
-            }
-
-            bool operator!=(const Data& d)const{
-                if (left != d.left || right.size() != d.right.size())
-                    return false;
-                return !(*this==d);
-            }
-
-            //Data(NonTerminal<t>* l){}
-        };
-
-        constexpr auto getType(Terminal<t>)const{
-            return RightAssociateType::TERMINAL;
+            return !(*this == d);
         }
+    };
 
-        constexpr auto getType(NonTerminal<t>) const{
-            return RightAssociateType::NONTERMINAL;
-        }
+    shared_ptr<Data> data;
 
-        shared_ptr<Data> data;
-        Rule(NonTerminal<t>* left,vector<RightAssociate<t>> a,vector<RightAssociate<t>> b):data{make_shared<Data>(left,a,b)}{}
-    public:
-        Rule():data{make_shared<Data>()}{}
-        Rule(NonTerminal<t>* l):data{make_shared<Data>(l)}{}
+    template <typename t>
+    constexpr auto getType(t) const requires(is_same_v<t, TERMINAL>)
+    {
+        return RightAssociateType::TERMINALOBJ;
+    }
 
-        Rule(const Rule& r):data{r.data}{}
-        Rule(Rule&& r):data{move(r.data)}{}
+    template <typename t>
+    constexpr auto getType(t) const requires(is_same_v<t, NONTERMINAL>)
+    {
+        return RightAssociateType::NONTERMINALOBJ;
+    }
 
-        Rule& operator=(const Rule& r){
-            data=r.data;
-            return *this;
-        }
+public:
+    Rule() : data{make_shared<Data>()} {}
+    Rule(const NONTERMINAL &n) : data{make_shared<Data>(n)} {}
+    Rule(const Rule &r) : data{r.data} {}
+    Rule(Rule &&r) : data{move(r.data)} {}
 
-        Rule& operator=(Rule&& r){
-            data=move(r.data);
-            return *this;
-        }
+    void setLeft(const NONTERMINAL &N)
+    {
+        data->left = N;
+    }
 
-        bool operator<(Rule& r)const{
-            return *this!=r;
-        }
+    vector<RIGHTASSOCIATE> &getRightAssociates() const
+    {
+        if (data == nullptr)
+            throw RuleNotSet{};
 
+        return data->right;
+    }
 
+    NONTERMINAL &getLeft() const
+    {
+        if (data == nullptr)
+            throw RuleNotSet{};
+        return data->left;
+    }
 
-        template<typename ...V>
-        Rule& add(isRightAssociate<t> auto x,V... y){
-            data->right.push_back(pair{getType(x),x});
-            return add(y...);
-        }
+    template <typename Stream>
+    friend Stream &operator<<(Stream &o, const Rule &r)
+    {
+        if (r.data != nullptr)
+            o << *r.data;
+        return o;
+    }
 
-        Rule& add(isRightAssociate<t> auto x){
-            data->right.push_back(pair{getType(x),x});
-            return *this;
-        }
-        
-        Rule& add(){
-            data->right.push_back(pair{RightAssociateType::TERMINAL,Terminal<t>::EPSILON});
-            return *this;
-        }
+    bool operator==(const Rule &r) const
+    {
+        return data != nullptr &&
+               r.data != nullptr &&
+               *data == *r.data;
+    }
 
-        Rule& add(RightAssociate<t>& r){
-            data->right.push_back(r);
-            return *this;
-        }
+    bool operator!=(const Rule &r) const
+    {
+        return data != nullptr &&
+               r.data != nullptr &&
+               *data != *r.data;
+    }
 
-        Rule& add(vector<RightAssociate<t>>& r){
-            for(auto a:r)
-                data->right.push_back(a);
-            return *this;
-        }
-
-        Rule* getThis(){
-            return this;
-        }
-
-
-        Rule& operator()(function<t (const Parser<t>&)> p){
-            data->action.push_back(p);
-            //cout<<data->action.size()<<endl;
-            return *this;
-        }
-
-
-        t operator()(const Parser<t>& p)const{
-            if(data!=nullptr && data->action.size()!=0)
-                return data->action[data->action.size()-1](p);
-            else 
-                throw ActionNotSet{};
-        }
-
-        function<t (const Parser<t>&)>& getAction()const{
-            return data->action.back();
-        }
-
-        bool hasAction()const{
-            return data->action.size()>0;
-        }
-
-        void removeAction(){
-            data->action.pop_back();
-        }
-
-        Rules<t>& operator|(const Rule& r)const{
-            if(r.data->left==nullptr){
-                r.data->left=data->left;
-            }
-            auto & x=data->left;
-            auto & y=x->data;
-        
-            y->add(r);
-            //cout<<"print"<<endl;
-            /*
-            if(data==nullptr)
-                cout<<"1"<<endl;
-            else if(data->left==nullptr)
-                cout<<"2"<<endl;
-            else if(data->left->data==nullptr)
-                cout<<"3"<<endl;
-            */
-            return *y;
-        }
-        
-        First<t> getFirst()const{
-            if(data==nullptr)
-                throw RulesNotFoundException{};
-            //cout<<(data->right[0].first==RightAssociateType::NONTERMINAL)<<endl;
-            if(data->right[0].first==RightAssociateType::NONTERMINAL){
-                
-                //cout<<"ok"<<endl;
-                return std::get<NonTerminal<t>>(data->right[0].second).getFirst();
-            }
-            else 
-                return std::get<Terminal<t>>(data->right[0].second).getFirst();
-        }
-
-
-        vector<RightAssociate<t>>& getRightAssociates()const{
-            return data->right;
-        }
-
-        friend ostream& operator<<(ostream& o,const Rule& r){
-            if(r.data!=nullptr)
-                o<<*r.data;
-            return o;
-        }
-
-        friend Logger& operator<<(Logger& o,const Rule& r){
-            if(r.data!=nullptr)
-                o<<*r.data;
-            return o;
-        }
-
-        HandleRule<t> getHandleRule()const{
-            return HandleRule<t>{data->left,{},getRightAssociates()};
-        }
-
-        bool operator==(const Rule& r)const{
-            return data!=nullptr &&
-                   r.data!=nullptr &&
-                   *data==*r.data;
-        }
-
-        bool operator!=(const Rule& r) const
+    Rule &add()
+    {
+        if (data == nullptr)
+            throw RuleNotSet{};
+        try
         {
-            return data != nullptr &&
-                   r.data != nullptr &&
-                   *data != *r.data;
+            if (getRightAssociates().size() != 0)
+                throw 1;
         }
-
-        NonTerminal<t>& getLeft()const{
-            return *data->left;
-        }
-
-        size_t getNumberOfNonTerminal()const{
-            size_t i=0;
-
-            for(auto k:getRightAssociates())
-                if(isNonTerminal(k))
-                    i++;
-            return i;
-        }
-
-        bool isNull()const{
-            return getRightAssociates().size()==1 && getRightAssociates()[0]==Terminal<t>::EPSILON;
-        }
-        bool isUnitProduction()const{
-            return getRightAssociates().size() == 1 && getLeft().getRules().size()==1;
-        }
-
-        bool isLeftRecursion()const{
-            return getLeft() == getRightAssociates()[0];
-        }
-
-        size_t countOccurence(const NonTerminal<t>& n)const{
-            size_t o=0;
-            for(const RightAssociate<t>& r:getRightAssociates())
-                if(r==n)
-                    o++;
-            return o;
-        }
-
-        Rule removeFromOccurence(const NonTerminal<t> &n, size_t o)
+        catch (...)
         {
-            //cout<<"checkpoint : removeFromOccurence ( "<<n<<" , "<<o<<" )"<<endl<<endl;
-            size_t i = 0;
-            Rule s{getLeft().getThis()};
-            for (auto r : getRightAssociates()){
-                //cout<<r<<endl;
-                if (r == n){
-                    //cout<<"checking : ok"<<endl<<endl;
-                    i++;
-                    if(i!=o)
-                        s.add(r);
-                }
-                else
-                    s.add(r);
-            }
-            //cout<<endl;
-            if(hasAction())
-                s(getAction());
-            return s;
+            throw 1;
         }
+        data->right.push_back(RIGHTASSOCIATE{RightAssociateType::TERMINALOBJ, TERMINAL::EPSILON});
+        return *this;
+    }
 
-        
+    Rule &add(auto temp) requires(isRightAssociate<decltype(temp)>)
+    {
+        if (data == nullptr)
+            throw RuleNotSet{};
+        data->right.push_back(RIGHTASSOCIATE{getType(temp), temp});
+        return *this;
+    }
 
-        friend class Rules<t>;
-        friend class NonTerminal<t>;
-        friend class HandleRule<t>;
+    template <typename... Vars>
+    Rule &add(auto temp, Vars... v) requires(isRightAssociate<decltype(temp)>)
+    {
+        if (data == nullptr)
+            throw RuleNotSet{};
+
+        data->right.push_back(RIGHTASSOCIATE{getType(temp), temp});
+        return add(v...);
+    }
+
+    Rule &add(const RIGHTASSOCIATE &r)
+    {
+        if (data == nullptr)
+            throw RuleNotSet{};
+        if (r == TERMINAL::EPSILON && getRightAssociates().size() != 0)
+            throw 1;
+        data->right.push_back(r);
+        return *this;
+    }
+    Rule &add(const vector<RIGHTASSOCIATE> &r)
+    {
+        if (data == nullptr)
+            throw RuleNotSet{};
+
+        for (auto i : r)
+            data->right.push_back(i);
+        return *this;
+    }
+
+    RULESTYPE &operator|(const RULE &R) const;
+
+    bool isNull() const
+    {
+        return getRightAssociates().size() == 1 && getRightAssociates()[0] == TERMINAL::EPSILON;
+    }
+
+    bool isUnitProduction() const
+    {
+        return getRightAssociates().size() == 1 && getLeft().getRules().size() == 1;
+    }
+
+    friend class RULESTYPE;
+    friend class RULE;
 };
 
-template<typename tt,template<typename xx>typename cc, typename... VV>requires isRightAssociate<cc<tt>,tt>
-Rule<tt> add(cc<tt> x,VV... M){
-    return Rule<tt>{}.add(x,M...);
+template <typename... VV>
+RULE add(auto x, VV... M) requires(isRightAssociate<decltype(x)>)
+{
+    RULE R;
+    R->add(x, M...);
+    return R;
 }
 
-template<typename tt,template<typename xx>typename cc> requires isRightAssociate<cc<tt>,tt>
-Rule<tt> add(cc<tt> x){
-    return Rule<tt>{}.add(x);
+RULE add(auto x) requires(isRightAssociate<decltype(x)>)
+{
+    RULE R;
+    R->add(x);
+    return R;
 }
 
-template<typename cc>
-Rule<cc> add(){
-    return Rule<cc>{}.add();
+RULE add()
+{
+    RULE R;
+    R->add();
+    return R;
 }
 
-
-
-#endif // !_RULES_HPP_
+#endif // __RULE_HPP__

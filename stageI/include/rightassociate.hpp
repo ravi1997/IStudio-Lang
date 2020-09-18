@@ -1,213 +1,73 @@
-#ifndef _RIGHT_ASSOCIATE_HPP_
-#define _RIGHT_ASSOCIATE_HPP_ 1
+#ifndef __RIGHTASSOCIATE_HPP__
+#define __RIGHTASSOCIATE_HPP__
 
-#ifndef _TYPES_HPP_
-#include<types.hpp>
-#endif // !_TYPES_HPP_
+#ifndef __TYPES_HPP__
+#include <types.hpp>
+#endif // !__TYPES_HPP__
 
-#ifndef _TERMINAL_HPP_
+#ifndef __TERMINAL_HPP__
 #include <terminal.hpp>
-#endif // !_TERMINAL_HPP_
+#endif // !__TERMINAL_HPP__
 
-#ifndef _NON_TERMINAL_HPP_
+#ifndef _NONTERMINAL_HPP_
 #include <nonterminal.hpp>
-#endif // !_NON_TERMINAL_HPP_
+#endif // !_NONTERMINAL_HPP_
 
-enum class RightAssociateType
-{
-    TERMINAL,
-    NONTERMINAL
-};
-
-ostream &operator<<(ostream &o, RightAssociateType& a)
+template <typename Stream>
+Stream &operator<<(Stream &o, const RightAssociateType &a)
 {
     switch (a)
     {
-    case RightAssociateType::TERMINAL:
+    case RightAssociateType::TERMINALOBJ:
         o << "RightAssociate::Terminal";
         break;
-    case RightAssociateType::NONTERMINAL:
+    case RightAssociateType::NONTERMINALOBJ:
         o << "RightAssociate::NonTerminal";
         break;
     }
     return o;
 }
 
-template <typename t>
-using RightAssociate = pair<RightAssociateType, variant<Terminal<t>, NonTerminal<t>>>;
-
-template <typename t>
-ostream &operator<<(ostream &o, RightAssociate<t>& r)
+template <typename Stream>
+Stream &operator<<(Stream &o, const RightAssociate &a)
 {
-    switch (r.first)
+    switch (a.first)
     {
-    case RightAssociateType::TERMINAL:
-        o << get<Terminal<t>>(r.second);
+    case RightAssociateType::TERMINALOBJ:
+        o << get<TERMINAL>(a.second);
         break;
-    case RightAssociateType::NONTERMINAL:
-        o << get<NonTerminal<t>>(r.second);
+    case RightAssociateType::NONTERMINALOBJ:
+        o << get<NONTERMINAL>(a.second);
         break;
-    }
-    return o;
-}
-
-template <typename t>
-Logger &operator<<(Logger &o, RightAssociate<t>& r)
-{
-    switch (r.first)
-    {
-    case RightAssociateType::TERMINAL:
-        o << get<Terminal<t>>(r.second);
-        break;
-    case RightAssociateType::NONTERMINAL:
-        o << get<NonTerminal<t>>(r.second);
+    default:
+        o << "Error some" << endl;
         break;
     }
     return o;
 }
 
-template <typename t>
-bool isNonTerminal(const RightAssociate<t> &r) {
-    return r.first==RightAssociateType::NONTERMINAL;
-}
-
-template <typename t>
-bool isTerminal(const RightAssociate<t> &r)
+bool isNonTerminal(const RightAssociate &r)
 {
-    return r.first == RightAssociateType::TERMINAL;
+    return r.first == RightAssociateType::NONTERMINALOBJ;
 }
 
-template <typename t>
-bool operator==(const RightAssociate<t>& r, const NonTerminal<t>& n)
+bool isTerminal(const RightAssociate &r)
 {
-    if (r.first == RightAssociateType::NONTERMINAL)
-    {
-        return get<NonTerminal<t>>(r.second) == n;
-    }
-    else
-    {
-        return false;
-    }
+    return r.first == RightAssociateType::TERMINALOBJ;
 }
 
-template <typename t>
-bool operator==(const RightAssociate<t>& r, const Terminal<t>& n)
+bool operator==(const RightAssociate &l, const TERMINAL &r)
 {
-    if (r.first == RightAssociateType::TERMINAL)
-    {
-        return get<Terminal<t>>(r.second)==n;
-    }
-    else
-    {
-        return false;
-    }
+    return isTerminal(l) && get<TERMINAL>(l.second) == r;
 }
 
-template <typename t>
-bool operator==(RightAssociate<t>& r, RightAssociate<t>& n)
+bool operator==(const RightAssociate &l, const NONTERMINAL &r)
 {
-    //cout<<r.first<<" == "<<n.first<<endl;
-    if (r.first == n.first)
-    {
-        switch(n.first){
-        case RightAssociateType::TERMINAL:
-            return get<Terminal<t>>(r.second) == get<Terminal<t>>(n.second);
-        case RightAssociateType::NONTERMINAL:
-            return get<NonTerminal<t>>(r.second) == get<NonTerminal<t>>(n.second);
-        }
-        return false;
-    }
-    else
-    {
-        return false;
-    }
+    return isNonTerminal(l) && get<NONTERMINAL>(l.second) == r;
 }
 
-template <typename t>
-bool operator!=(RightAssociate<t>& r, RightAssociate<t>& n)
+bool operator!=(const RightAssociate &l, isRightAssociate auto x)
 {
-    //cout<<r<<endl;
-    //cout<<r.first<<endl;
-    return !(r==n);
+    return !(l == x);
 }
-
-template <typename t>
-bool operator!=(RightAssociate<t>& r, Terminal<t>& n)
-{
-    return !(r == n);
-}
-
-template <typename t>
-bool operator!=(RightAssociate<t>& r, NonTerminal<t>& n)
-{
-    return !(r == n);
-}
-
-template <typename t>
-First<t> getFirst(RightAssociate<t>& r)
-{
-    switch (r.first)
-    {
-    case RightAssociateType::TERMINAL:
-        return get<Terminal<t>>(r.second).getFirst();
-        
-    case RightAssociateType::NONTERMINAL:
-        return get<NonTerminal<t>>(r.second).getFirst();
-    }
-    return First<t>{};
-}
-
-template <typename t>
-ostream &operator<<(ostream &o, State<t>& s)
-{
-    for (auto h : s)
-    {
-            o << h.first << " ";
-            for (auto l1 : h.second)
-                o << l1 << " ";
-            o << endl;
-    }
-    return o;
-}
-
-template <typename t>
-Logger &operator<<(Logger &o, State<t> &s)
-{
-    for (auto h : s)
-    {
-        o << h.first << " ";
-        for (auto l1 : h.second)
-            o << l1 << " ";
-        o << Logger::endl;
-    }
-    return o;
-}
-
-
-Logger& operator<<(Logger& l,SR s){
-    switch(s){
-        case SR::SHIFT:l<<"SHIFT";break;
-        case SR::REDUCE:l<<"REDUCE";break;
-        case SR::EMPTY:l<<"REDUCE";break;
-    }
-    return l;
-}
-
-ostream &operator<<(ostream &l, SR s)
-{
-    switch (s)
-    {
-    case SR::SHIFT:
-        l << "SHIFT";
-        break;
-    case SR::REDUCE:
-        l << "REDUCE";
-        break;
-    case SR::EMPTY:
-        l<<"EMPTY";
-        break;
-    }
-    return l;
-}
-
-#endif // !_RIGHT_ASSOCIATE_HPP_
+#endif // __RIGHTASSOCIATE_HPP__

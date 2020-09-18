@@ -1,191 +1,164 @@
 #ifndef _RULES_HPP_
-#define _RULES_HPP_ 1
+#define _RULES_HPP_
 
-#ifndef _TYPES_HPP_
+#ifndef __TYPES_HPP__
 #include <types.hpp>
-#endif // !_TYPES_HPP_
+#endif
 
-template<typename t>
-class Rules{
-    private:
-        shared_ptr<vector<Rule<t>>> data;
+#ifndef __RULE_HPP__
+#include <rule.hpp>
+#endif
 
-    public:
+template <>
+class Rules<PARSERTYPE>
+{
+private:
+    shared_ptr<vector<RULE>> data;
 
-    Rules():data{make_shared<vector<Rule<t>>>()}{}
-    Rules(const Rules &d) : data{d.data} {}
-    Rules(const Rules &&d) : data{move(d.data)} {}
-    Rules& operator=(const Rules &d){
-        data.reset();
-        data=d.data;
+public:
+    Rules() : data{make_shared<vector<RULE>>()} {}
+    Rules(const Rules &ds) : data{ds.data} {}
+    Rules(const Rules &&ds) : data{move(ds.data)} {}
+    Rules &operator=(const Rules &rs)
+    {
+        data = rs.data;
         return *this;
     }
-    Rules &operator=(const Rules &&d)
+    Rules &operator=(Rules &&rs)
+    {
+        data = move(rs.data);
+        return *this;
+    }
+
+    ~Rules()
     {
         data.reset();
-        data = move(d.data);
-        return *this;
     }
 
-    ~Rules()=default;
+    void add(const RULE &r) const
+    {
+        if (data == nullptr)
+            throw RulesNotSet{};
+        data->emplace_back(r);
+    }
 
-    auto begin(){
-        if(data==nullptr)
-            throw RulesNotFoundException{};
+    RULE &back() const
+    {
+        if (data == nullptr)
+            throw RulesNotSet{};
+        return data->back();
+    }
+
+    auto begin()
+    {
+        if (data == nullptr)
+            throw RulesNotSet{};
         return data->begin();
     }
-
-
-    auto end(){
+    auto end()
+    {
         if (data == nullptr)
-            throw RulesNotFoundException{};
+            throw RulesNotSet{};
         return data->end();
     }
 
     auto begin() const
     {
         if (data == nullptr)
-            throw RulesNotFoundException{};
+            throw RulesNotSet{};
         return data->begin();
     }
-
     auto end() const
     {
         if (data == nullptr)
-            throw RulesNotFoundException{};
+            throw RulesNotSet{};
         return data->end();
     }
 
-    void add(const Rule<t>& r){
-        if(data==nullptr)
-            data=make_shared<vector<Rule<t>>>();
-
-        data->push_back(r);
-    }
-
-
-    size_t size()const{
+    auto size() const
+    {
         if (data == nullptr)
-            throw RulesNotFoundException{};
-
+            throw RulesNotSet{};
         return data->size();
     }
 
-    auto& operator[](size_t i){
+    auto &operator[](size_t i) const
+    {
         if (data == nullptr)
-            throw RulesNotFoundException{};
-
+            throw RulesNotSet{};
+        if (size() == 0)
+            throw RulesEmpty{};
         return (*data)[i];
     }
 
-    auto &operator[](size_t i)const
+    void add(const Rules &rs) const
     {
         if (data == nullptr)
-            throw RulesNotFoundException{};
-
-        return (*data)[i];
+            throw RulesNotSet{};
+        for (auto r : rs)
+            data->push_back(r);
     }
 
-    Rules& operator|(const Rule<t> r){
-        if(r.data->left==nullptr)
-            r.data->left=(*data)[0].data->left;
-        add(r);
-        return *this;
-    }
-
-
-    First<t> getFirst()const{
-        First<t> f;
-        try{
-            for(auto x:*this){
-                ////cout<<x<<endl;
-                try{
-                    for(auto u:x.getFirst())
-                        f.push_back(u);
-                }catch(...){}
-            }
-        }catch(...){
-        }
-        return f;
-    }
-
-
-    bool operator==(const Rules& r) const{
-        if(data==nullptr || r.data==nullptr)
-            return false;
-        if(data->size()!=r.data->size())
-            return false;
-        for (size_t i = 0, j = data->size();i<j;i++)
-            if((*this)[i]!=r[i])
-                return false;
-        return true;
-    }
-    bool operator!=(const Rules& r)const
+    void remove(const RULE &r) const
     {
-        if (data == nullptr || r.data == nullptr)
-            return false;
-        if (data->size() != r.data->size())
-            return false;
-        return !(*this==r);
+        if (data == nullptr)
+            throw RulesNotSet{};
+        auto b = begin();
+        auto e = end();
+
+        auto i = find(b, e, r);
+        if (i != e)
+            data->erase(i);
+        else if (size() != 0)
+            throw 1;
     }
 
-    void remove(const Rule<t>& r){
-        if(data!=nullptr){
-            if(find(data->begin(),data->end(),r)!=data->end())
-                data->erase(find(data->begin(), data->end(), r));
-        }
+    template <typename Stream>
+    friend Stream &operator<<(Stream &o, Rules rs)
+    {
+        for (RULE &r : rs)
+            o << r << endl;
+        return o;
     }
 
-    void removeAll(){
-        if(data!=nullptr){
-            for(auto r:*this)
-                r.getLeft().removeRule(r);
-
-            data->clear();
-        }
+    void removeAll()
+    {
+        if (data == nullptr)
+            throw RulesNotSet{};
+        data.reset();
     }
 
-    Rules returnReduceInner(const Rule<t> r){
+    Rules &operator|(const RULE &r);
+
+    Rules returnReduceInner(const RULE &r) const
+    {
         Rules rs;
-        //cout<<"Checkpoint : returnReduceInner for "<<r<<endl;
-        if(size()>0){
-            for(auto i:*this){
-                //cout<< i <<endl;
-
-                if(i.countOccurence(r.getLeft())>0){
-                    //cout<<"Occurence found are "<<i.countOccurence(r.getLeft())<<endl;
-                    for (size_t j = i.countOccurence(r.getLeft());j>0;j--){
-                        //cout << "adding new rule : " << i.removeFromOccurence(r.getLeft(), j) << endl;
-                        rs.add(i.removeFromOccurence(r.getLeft(),j));
-                        i.removeFromOccurence(r.getLeft(), j).getLeft()->add(i.removeFromOccurence(r.getLeft(), j).getRightAssociates());
+        if (size() > 0)
+        {
+            for (auto i : *this)
+            {
+                if (i.countOccurrence(r.getLeft()) > 0)
+                {
+                    for (size_t j = i.countOccurrence(r.getLeft()); j > 0; j--)
+                    {
+                        rs.add(i.removeFromOccurrence(r.getLeft(), j));
                     }
-                    //cout<<endl;
                 }
             }
-            if(rs.size()>0){
+            if (rs.size() > 0)
                 rs.add(rs.returnReduceInner(r));
-            }
         }
-
-        //cout<<endl<<endl;
         return rs;
     }
 
-
-    Rules returnReduce(const Rule<t> r){
+    Rules returnReduce(const RULE &r) const
+    {
         Rules rs;
-        
-        //cout<<"Checkpoint : returnReduce"<<endl;
 
-        for(auto r1:*this)
+        for (auto r1 : *this)
             rs.add(r1);
-        
-        ////cout<<rs<<endl;
 
-        Rules temp=returnReduceInner(r);
-
-        ////cout<<endl<<temp<<endl;
-
+        Rules temp = returnReduceInner(r);
 
         for (auto r1 : temp)
             rs.add(r1);
@@ -193,57 +166,73 @@ class Rules{
         return rs;
     }
 
-    Rules returnReduceUnit(const Rule<t> r)
+    bool operator==(const Rules &rs) const
     {
-        Rules rs;
-        if (size() > 0)
+        if (size() != rs.size())
+            return false;
+
+        for (size_t i = 0, j = size(); i < j; i++)
+            if ((*this)[i] != rs[i])
+                return false;
+
+        return true;
+    }
+
+    Rules removeAllOccurrence(const NONTERMINAL &n) const;
+    Rules replaceAllOccurrence(const RULE &n) const;
+
+    vector<RIGHTASSOCIATE> getCommonRightAssociates() const
+    {
+        //cout << "Debug : inside getCommonRightAssociates" << endl;
+
+        vector<RIGHTASSOCIATE> result;
+
+        for (auto r : *this)
         {
-            for (auto i : *this)
+            //cout << "For " << r << endl;
+            vector<RIGHTASSOCIATE> v = r.getRight();
+
+            auto min = [](auto i, auto j) requires is_same_v<decltype(i), decltype(j)>
             {
-                Rule<t> temp{i.getLeft().getThis()};
-                for(auto j:i.getRightAssociates())
-                    if(j==r.getLeft())
-                        temp.add(r.getRightAssociates()[0]);
-                    else
-                        temp.add(j);
-                rs.add(temp);
-                temp.getLeft().removeRule(i);
-                temp.getLeft()->add(temp.getRightAssociates());
+                return (i < j) ? i : j;
+            };
+
+            for (auto r1 : *this)
+            {
+                // cout << "against " << r1 << endl;
+                if (r1 == r)
+                    continue;
+                if (r1.getRight()[0] == v[0])
+                {
+                    //cout << "found equivalence " << endl;
+                    auto rs = r1.getRight();
+                    long unsigned int i = 0, j = min(rs.size(), v.size());
+                    //cout << "i : " << i << "j : " << j << endl;
+                    for (; i < j; i++)
+                    {
+                        if (rs[i] != v[i])
+                            break;
+                    }
+
+                    if (i != j)
+                    {
+                        auto e = v.size();
+                        while (i != e)
+                        {
+                            v.pop_back();
+                            i++;
+                        }
+                    }
+                }
             }
+            //cout << "v.size : " << v.size() << " result.size : " << result.size() << endl;
+            if (result.size() == 0 || v.size() < result.size())
+                result = move(v);
         }
 
-        ////cout<<endl<<temp<<endl;
-        return rs;
+        return result;
     }
-
-    void add(const Rules& r){
-        try{
-            if(data==nullptr){
-                data=r.data;
-            }
-            else if(r.size()>0){
-                for(auto i:r)
-                    add(i);
-            }
-
-        }catch(...){}
-    }
-
-    friend ostream& operator<<(ostream& o,Rules rs){
-        for(auto r:rs)
-            o<<r<<endl;
-        return o;
-    }
-
-    Rules& removeRedundant(){
-        //sort( data->begin(), data->end() );
-        auto ip = std::unique(data->begin(), data->end());
-        data->resize(std::distance(data->begin(), ip));
-        //data->erase( unique( data->begin(), data->end() ), data->end() );
-        return *this;
-    }
-
-    friend class Grammar<t>;
+    friend class GRAMMAR;
 };
 
-#endif // !_RULES_HPP_
+#endif // _RULES_HPP_

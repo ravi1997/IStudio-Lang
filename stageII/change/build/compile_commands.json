@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageII/change/build",
+  "command": "/usr/bin/g++-10   -I/mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageII/change/include -I/mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageII/change/source  -g   -ggdb -Wall -Wextra -Werror -Wshadow -std=c++2a -fconcepts -Wpedantic -fpie -pipe -o CMakeFiles/IStudioLang.dir/source/main.cpp.o -c /mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageII/change/source/main.cpp",
+  "file": "/mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageII/change/source/main.cpp"
+}
+]

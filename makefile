@@ -1,29 +1,17 @@
-all:
+all: $(clean)
+	$(MAKE) --no-print-directory preprocess
+	cp preprocess/output/main.cpp stage1/source/main.cpp
 	$(MAKE) --no-print-directory stage1
-	$(MAKE) --no-print-directory stage2
-	$(MAKE) --no-print-directory stage3
 
 
-run1:
-	$(MAKE) --no-print-directory -C stageI run
-
+preprocess:
+	$(MAKE) --no-print-directory -C preprocess all
 
 stage1:
 	$(MAKE) --no-print-directory -C stageI all
 
-stage2:
-	$(MAKE) --no-print-directory all
-
-stage3:
-	cd stage\ III
-	$(MAKE) --no-print-directory all
-
 clean:
-	cd stage\ I
-	$(MAKE) --no-print-directory clean
-	cd stage\ II
-	$(MAKE) --no-print-directory clean
-	cd stage\ III
-	$(MAKE) --no-print-directory clean
+	$(MAKE) --no-print-directory -C preprocess clean
+	$(MAKE) --no-print-directory -C stageI clean
 
-.PHONY: all clean stage1 stage2 stage3 preprocess
+.PHONY: all clean stage1 preprocess

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20200823-1031-Experimental"
+	Name="(empty)"
+	Generator="ctest-3.10.2"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Linux"
+	Hostname="DESKTOP-55VO8EK"
+	OSRelease="4.19.104-microsoft-standard"
+	OSVersion="#1 SMP Wed Feb 19 06:37:35 UTC 2020"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="58"
+	ProcessorCacheSize="3072"
+	NumberOfLogicalCPU="4"
+	NumberOfPhysicalCPU="2"
+	TotalVirtualMemory="2048"
+	TotalPhysicalMemory="6322"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="3292.52"
+	>
+	<Testing>
+		<StartDateTime>Aug 23 16:01 IST</StartDateTime>
+		<StartTestTime>1598178693</StartTestTime>
+		<TestList>
+			<Test>./Comptest/cfg.json</Test>
+		</TestList>
+		<Test Status="passed">
+			<Name>Comptest/cfg.json</Name>
+			<Path>.</Path>
+			<FullName>./Comptest/cfg.json</FullName>
+			<FullCommandLine>/mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageI/change/bin/IStudioLang "test/cfg.json"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0348861</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/mnt/c/Users/ravi1/OneDrive/Documents/GitHub/IStudio-Lang/stageI/change/bin/IStudioLang "test/cfg.json"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value encoding="base64" compression="gzip">eJzVXFFvmzAQfs+v8B/YQ9spmvqwhzWdVGlrpbbTHieXuAqagzNj2ubfzxjSQLAJSYD7+hIb23f+OJsvl+PiW5U8Cr2MEy5TdsmesyQysUpmIpJc87zKxNtKaXO1ENFfFqkkNbZBF5damEwnj+uVYAlfCrayMkthhP4Rp8YKRmKVq3hYJ4a/5cJG88ikpdxNEpuYyzh18zgtvg6nq9LrrutDmJ7zdOGV3mLabXcigV43XaCvfm/Nq1mut2gpb1wkaaZFeTHx2Zul/zKuxd1KbKpXUqWC3cxyFCIxC5HGqeuuXBdjokzLtetytbJRLZec3TuDWLvw+V0i1+xVx0a42lK9FJW873fe7Go/bXMxytWu3dKzq82ql7UXLtltJuXKaGYWWr2m+UgRGXbt7jS1y2P+fHGfZ1NXXJy7YvqZ/Ypdnytspyttryttd7Tg2na7wna70nZ/l4obNlPZkxTs29rCvbZmkvX7jOfWMvFzLDSbPBhukT+sl09K+jf25D6TFuqlKwN7/9PX7RId9hzsrlnluWisYPhB8a5tV8AfAmTVqpgIMVG17EYglLjIqvYDggUE5TS+A2U4RE5DYTHqXYW0lWBsRAoExgr9ujKQ/hWeP4XhP2H6Szj+EYg/ROj/QPANCMMgcAoVi6DwBiVTkHHDqGwA+Pwf9AMNx+voFdqQsRykCA6QHzLk1iLH03uMhjwyg+KfEDMSDgfRsg4Wz9AzCzGXELAHLF+0/uDC8V9Q/BXSCAmQP0Ltf9DGQEaPfKD4E7RRDrrYxrgRDdo4xvjRi5FjFiNEKnC+OLu8tEkNN2Jp5VIf3qqFLc4yVwghVnDwrQCkgLQD3Fl7i22bk7VvTJ6thRKd6H1lPgTIMXJNTkNIg6ryWFkwwaRQ9+GXqaRNVpJDqxmUGzl3h1aimiO406VWwppG6bsXoaXic4zIzNCPDCDCwfNnBv82oLTYYJksozA1IjejsHHfOOoEbxG8N4RYuMKe3nR6gNgUAF+Oi2/gjB9SzxmCKUm3GwaoIbKDxvdYR91NvSSs0Hp65FwFwE6AfATCQAicQ8Uyp86767vZOcs/0tX/WEjvT4VfSSJ5VUOhHCWjCSs2ielnjbQNkaANl/0EECsE9L9wmA6S22DYjHxnQW0nHCvRIsGxw1AJTkj+FqB/BeJPgfpPQP4Sin9EGomC4B0UpoHgFjI2geEPUsag44hxWeG42bYRJjtHy9lSe4f7R/h0BNMxAqkanQQb+Rqeo7V82RvBwceAaRUMCmw0bm6lOOLK13o29TZfnHubp58bzeURWd5mj/LNEVre9or6SobM3nSb8IteXXvRW1xZdcVBXD0p9S2Mg1yeY7Zv4PvpZl00upPOGq/EO8zeMrYBYI/erhi2B7h1VFwc7dZVcx1GfWl7yw1oUxTOQegqXmGYwMggybSNPx7YPvE2scbrgo0yd7fNUwe942e1ZewkuX0r0TiX0FWvi9P+IiVV/bxCn1lr3y5hleXJgd101rMAPQmCNUMdSWZHcNap5NozrR5lk+OsMUROUf9MFER5GIMdZJkA+x24GofN2U4cXWliMvkP6kqG2A==</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<EndDateTime>Aug 23 16:01 IST</EndDateTime>
+		<EndTestTime>1598178693</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>
